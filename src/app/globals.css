@@ -1,0 +1,45 @@
+/* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+/* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
+
+:root {
+	--salon-primary: #B76E79; /* primary buttons, icons, nav accents */
+	--salon-gold: #D4AF37; /* hover effects, decorative, premium CTAs */
+	--salon-cream: #FFFDF9; /* main page background, content sections */
+	--salon-card: #F8D7DA; /* cards, forms, dialog boxes, nav menus */
+	--salon-section: #F8D7DA; /* section backgrounds */
+	--salon-overlay: #F8D7DA; /* overlays */
+}
+
+html, body {
+	background-color: var(--salon-cream);
+	color: var(--salon-charcoal, #333333);
+}
+
+/* UI color tokens (from style guide) */
+:root {
+	--salon-charcoal: #333333; /* headings, body paragraphs, primary text */
+	--salon-slate: #666666; /* descriptions, captions, labels */
+	--salon-success: #2E8B57; /* success messages, confirmations */
+	--salon-warning: #F4A300; /* validation warnings, alerts */
+	--salon-error: #D62828; /* error messages, invalid fields */
+}
+
+/* Helper classes for alerts and text (also usable in non-Tailwind contexts) */
+.alert-success { background-color: var(--salon-success); color: white; }
+.alert-warning { background-color: var(--salon-warning); color: white; }
+.alert-error { background-color: var(--salon-error); color: white; }
+.text-salon-charcoal { color: var(--salon-charcoal); }
+.text-salon-slate { color: var(--salon-slate); }
+.bg-salon-card { background-color: var(--salon-card); }
+.bg-salon-section { background-color: var(--salon-section); }
+.bg-salon-overlay { background-color: var(--salon-overlay); }
+
+/* Small accessibility helper to ensure adequate contrast for white text on colored backgrounds */
+.text-on-dark { color: white; }
