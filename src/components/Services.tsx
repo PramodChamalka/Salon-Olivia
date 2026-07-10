@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Scissors, Sparkles, Droplets, Palette, Clock } from "lucide-react";
 export function Services() {
   const [activeTab, setActiveTab] = useState("All");

@@ -1,7 +1,7 @@
 "use client";
 
-import { AdminDashboard } from "../../components/AdminDashboard";
+import { AdminGate } from "../../components/AdminGate";
 
 export default function AdminPage() {
-  return <AdminDashboard />;
+  return <AdminGate />;
 }

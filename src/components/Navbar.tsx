@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,6 +74,12 @@ export function Navbar() {
                 {link.name}
               </button>
             ))}
+            <Link
+              href="/auth"
+              className="text-gray-600 hover:text-salon-gold transition-colors font-medium text-sm uppercase tracking-wider"
+            >
+              Sign In
+            </Link>
             <button
               onClick={() => scrollToSection("#appointments")}
               className="bg-salon-gold text-white px-6 py-2 rounded-full font-medium hover:bg-yellow-600 transition-colors shadow-sm"
@@ -106,6 +113,13 @@ export function Navbar() {
                 {link.name}
               </button>
             ))}
+            <Link
+              href="/auth"
+              className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-salon-gold hover:bg-salon-cream rounded-md"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Sign In
+            </Link>
             <button
               onClick={() => scrollToSection("#appointments")}
               className="block w-full text-center mt-4 bg-salon-gold text-white px-6 py-3 rounded-md font-medium hover:bg-yellow-600 transition-colors"

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 export function Gallery() {
   const [activeFilter, setActiveFilter] = useState("All");
   const filters = ["All", "Hair", "Skin", "Nails", "Salon"];
