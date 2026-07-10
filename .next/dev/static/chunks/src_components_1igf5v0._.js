@@ -1942,7 +1942,7 @@ function Booking() {
         columnNumber: 5
     }, this);
 }
-_s(Booking, "cjjjAAj0NyaUUYCzuoqxLqVXlGw=");
+_s(Booking, "kav6rDoZhUA+3iynHLFKbZgWIdQ=");
 _c = Booking;
 var _c;
 __turbopack_context__.k.register(_c, "Booking");
