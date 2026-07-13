@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   LayoutDashboard,
   Calendar,
@@ -10,8 +9,8 @@ import {
   Users as UsersIcon,
   DollarSign,
   Award,
-  Bell } from
-'lucide-react';
+  Bell,
+} from "lucide-react";
 import {
   LineChart,
   Line,
@@ -21,108 +20,111 @@ import {
   Tooltip,
   ResponsiveContainer,
   BarChart,
-  Bar } from
-'recharts';
+  Bar,
+} from "recharts";
 export function AdminDashboard() {
   const bookingData = [
-  {
-    name: 'Mon',
-    bookings: 12
-  },
-  {
-    name: 'Tue',
-    bookings: 19
-  },
-  {
-    name: 'Wed',
-    bookings: 15
-  },
-  {
-    name: 'Thu',
-    bookings: 22
-  },
-  {
-    name: 'Fri',
-    bookings: 30
-  },
-  {
-    name: 'Sat',
-    bookings: 45
-  },
-  {
-    name: 'Sun',
-    bookings: 38
-  }];
+    {
+      name: "Mon",
+      bookings: 12,
+    },
+    {
+      name: "Tue",
+      bookings: 19,
+    },
+    {
+      name: "Wed",
+      bookings: 15,
+    },
+    {
+      name: "Thu",
+      bookings: 22,
+    },
+    {
+      name: "Fri",
+      bookings: 30,
+    },
+    {
+      name: "Sat",
+      bookings: 45,
+    },
+    {
+      name: "Sun",
+      bookings: 38,
+    },
+  ];
 
   const serviceData = [
-  {
-    name: 'Haircuts',
-    value: 120
-  },
-  {
-    name: 'Coloring',
-    value: 85
-  },
-  {
-    name: 'Facials',
-    value: 65
-  },
-  {
-    name: 'Nails',
-    value: 90
-  },
-  {
-    name: 'Makeup',
-    value: 40
-  }];
+    {
+      name: "Haircuts",
+      value: 120,
+    },
+    {
+      name: "Coloring",
+      value: 85,
+    },
+    {
+      name: "Facials",
+      value: 65,
+    },
+    {
+      name: "Nails",
+      value: 90,
+    },
+    {
+      name: "Makeup",
+      value: 40,
+    },
+  ];
 
   const recentBookings = [
-  {
-    id: '#B-1042',
-    client: 'Amali Perera',
-    service: 'Balayage Color',
-    date: 'Today, 10:00 AM',
-    status: 'Completed'
-  },
-  {
-    id: '#B-1043',
-    client: 'Sarah Jenkins',
-    service: 'Signature Haircut',
-    date: 'Today, 11:30 AM',
-    status: 'In Progress'
-  },
-  {
-    id: '#B-1044',
-    client: 'Nimali Silva',
-    service: 'Radiance Facial',
-    date: 'Today, 02:00 PM',
-    status: 'Upcoming'
-  },
-  {
-    id: '#B-1045',
-    client: 'Jessica Wong',
-    service: 'Luxury Gel Mani',
-    date: 'Tomorrow, 09:00 AM',
-    status: 'Upcoming'
-  },
-  {
-    id: '#B-1046',
-    client: 'Tanya Fernando',
-    service: 'Bridal Trial',
-    date: 'Tomorrow, 01:00 PM',
-    status: 'Upcoming'
-  }];
+    {
+      id: "#B-1042",
+      client: "Amali Perera",
+      service: "Reborn Color",
+      date: "Today, 10:00 AM",
+      status: "Completed",
+    },
+    {
+      id: "#B-1043",
+      client: "Sarah Jenkins",
+      service: "Signature Haircut",
+      date: "Today, 11:30 AM",
+      status: "In Progress",
+    },
+    {
+      id: "#B-1044",
+      client: "Nimali Silva",
+      service: "Radiance Facial",
+      date: "Today, 02:00 PM",
+      status: "Upcoming",
+    },
+    {
+      id: "#B-1045",
+      client: "Jessica Wong",
+      service: "Luxury Gel Mani",
+      date: "Tomorrow, 09:00 AM",
+      status: "Upcoming",
+    },
+    {
+      id: "#B-1046",
+      client: "Tanya Fernando",
+      service: "Bridal Trial",
+      date: "Tomorrow, 01:00 PM",
+      status: "Upcoming",
+    },
+  ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Completed':
-        return 'bg-green-100 text-green-800';
-      case 'In Progress':
-        return 'bg-blue-100 text-blue-800';
-      case 'Upcoming':
-        return 'bg-yellow-100 text-yellow-800';
+      case "Completed":
+        return "bg-green-100 text-green-800";
+      case "In Progress":
+        return "bg-blue-100 text-blue-800";
+      case "Upcoming":
+        return "bg-yellow-100 text-yellow-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
   return (
@@ -139,32 +141,32 @@ export function AdminDashboard() {
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           <a
             href="#"
-            className="flex items-center px-4 py-3 bg-salon-gold/20 text-salon-gold rounded-lg font-medium">
-            
+            className="flex items-center px-4 py-3 bg-salon-gold/20 text-salon-gold rounded-lg font-medium"
+          >
             <LayoutDashboard size={20} className="mr-3" /> Overview
           </a>
           <a
             href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
-            
+            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+          >
             <Calendar size={20} className="mr-3" /> Bookings
           </a>
           <a
             href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
-            
+            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+          >
             <Scissors size={20} className="mr-3" /> Services
           </a>
           <a
             href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
-            
+            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+          >
             <Users size={20} className="mr-3" /> Customers
           </a>
           <a
             href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
-            
+            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+          >
             <Award size={20} className="mr-3" /> Staff
           </a>
         </nav>
@@ -172,14 +174,14 @@ export function AdminDashboard() {
         <div className="p-4 border-t border-gray-800 space-y-2">
           <a
             href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">
-            
+            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
+          >
             <Settings size={20} className="mr-3" /> Settings
           </a>
           <a
             href="/"
-            className="flex items-center px-4 py-3 text-red-400 hover:bg-gray-800 hover:text-red-300 rounded-lg transition-colors">
-            
+            className="flex items-center px-4 py-3 text-red-400 hover:bg-gray-800 hover:text-red-300 rounded-lg transition-colors"
+          >
             <LogOut size={20} className="mr-3" /> Back to Site
           </a>
         </div>
@@ -202,8 +204,9 @@ export function AdminDashboard() {
               <img
                 src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-4.0.3&w=100&q=80"
                 alt="Admin"
-                className="w-8 h-8 rounded-full object-cover" />
-              
+                className="w-8 h-8 rounded-full object-cover"
+              />
+
               <span className="text-sm font-medium text-gray-700 hidden sm:block">
                 Ms. Nadeeka
               </span>
@@ -287,32 +290,36 @@ export function AdminDashboard() {
                     <CartesianGrid
                       strokeDasharray="3 3"
                       vertical={false}
-                      stroke="#f3f4f6" />
-                    
+                      stroke="#f3f4f6"
+                    />
+
                     <XAxis
                       dataKey="name"
                       axisLine={false}
                       tickLine={false}
                       tick={{
-                        fill: '#6b7280',
-                        fontSize: 12
-                      }} />
-                    
+                        fill: "#6b7280",
+                        fontSize: 12,
+                      }}
+                    />
+
                     <YAxis
                       axisLine={false}
                       tickLine={false}
                       tick={{
-                        fill: '#6b7280',
-                        fontSize: 12
-                      }} />
-                    
+                        fill: "#6b7280",
+                        fontSize: 12,
+                      }}
+                    />
+
                     <Tooltip
                       contentStyle={{
-                        borderRadius: '8px',
-                        border: 'none',
-                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                      }} />
-                    
+                        borderRadius: "8px",
+                        border: "none",
+                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                      }}
+                    />
+
                     <Line
                       type="monotone"
                       dataKey="bookings"
@@ -320,14 +327,14 @@ export function AdminDashboard() {
                       strokeWidth={3}
                       dot={{
                         r: 4,
-                        fill: '#C9A84C',
+                        fill: "#C9A84C",
                         strokeWidth: 2,
-                        stroke: '#fff'
+                        stroke: "#fff",
                       }}
                       activeDot={{
-                        r: 6
-                      }} />
-                    
+                        r: 6,
+                      }}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -347,50 +354,54 @@ export function AdminDashboard() {
                       top: 0,
                       right: 0,
                       left: 20,
-                      bottom: 0
-                    }}>
-                    
+                      bottom: 0,
+                    }}
+                  >
                     <CartesianGrid
                       strokeDasharray="3 3"
                       horizontal={false}
-                      stroke="#f3f4f6" />
-                    
+                      stroke="#f3f4f6"
+                    />
+
                     <XAxis
                       type="number"
                       axisLine={false}
                       tickLine={false}
                       tick={{
-                        fill: '#6b7280',
-                        fontSize: 12
-                      }} />
-                    
+                        fill: "#6b7280",
+                        fontSize: 12,
+                      }}
+                    />
+
                     <YAxis
                       dataKey="name"
                       type="category"
                       axisLine={false}
                       tickLine={false}
                       tick={{
-                        fill: '#374151',
+                        fill: "#374151",
                         fontSize: 12,
-                        fontWeight: 500
-                      }} />
-                    
+                        fontWeight: 500,
+                      }}
+                    />
+
                     <Tooltip
                       cursor={{
-                        fill: '#f9fafb'
+                        fill: "#f9fafb",
                       }}
                       contentStyle={{
-                        borderRadius: '8px',
-                        border: 'none',
-                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                      }} />
-                    
+                        borderRadius: "8px",
+                        border: "none",
+                        boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                      }}
+                    />
+
                     <Bar
                       dataKey="value"
                       fill="#2D2D2D"
                       radius={[0, 4, 4, 0]}
-                      barSize={24} />
-                    
+                      barSize={24}
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -420,11 +431,11 @@ export function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {recentBookings.map((booking, idx) =>
-                  <tr
-                    key={idx}
-                    className="hover:bg-gray-50 transition-colors">
-                    
+                  {recentBookings.map((booking, idx) => (
+                    <tr
+                      key={idx}
+                      className="hover:bg-gray-50 transition-colors"
+                    >
                       <td className="p-4 text-sm font-medium text-gray-900">
                         {booking.id}
                       </td>
@@ -439,8 +450,8 @@ export function AdminDashboard() {
                       </td>
                       <td className="p-4">
                         <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}>
-                        
+                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}
+                        >
                           {booking.status}
                         </span>
                       </td>
@@ -450,13 +461,13 @@ export function AdminDashboard() {
                         </button>
                       </td>
                     </tr>
-                  )}
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </main>
-    </div>);
-
+    </div>
+  );
 }

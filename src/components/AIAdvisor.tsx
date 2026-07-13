@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { MessageSquare, X, Sparkles, ChevronRight } from "lucide-react";
 export function AIAdvisor() {
   const [isOpen, setIsOpen] = useState(false);

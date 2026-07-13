@@ -1,5 +1,4 @@
-import React from 'react';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 export function Contact() {
   return (
     <section id="contact" className="py-20 bg-white">
@@ -26,8 +25,8 @@ export function Contact() {
                   <input
                     type="text"
                     className="w-full border-gray-300 rounded-lg p-3 border focus:ring-salon-gold focus:border-salon-gold bg-white"
-                    placeholder="Your Name" />
-                  
+                    placeholder="Your Name"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -36,8 +35,8 @@ export function Contact() {
                   <input
                     type="email"
                     className="w-full border-gray-300 rounded-lg p-3 border focus:ring-salon-gold focus:border-salon-gold bg-white"
-                    placeholder="your@email.com" />
-                  
+                    placeholder="your@email.com"
+                  />
                 </div>
               </div>
 
@@ -60,14 +59,14 @@ export function Contact() {
                 <textarea
                   rows={5}
                   className="w-full border-gray-300 rounded-lg p-3 border focus:ring-salon-gold focus:border-salon-gold bg-white resize-none"
-                  placeholder="How can we help you?">
-                </textarea>
+                  placeholder="How can we help you?"
+                ></textarea>
               </div>
 
               <button
                 type="button"
-                className="w-full bg-salon-dark text-white py-4 rounded-lg font-medium hover:bg-black transition-colors shadow-md">
-                
+                className="w-full bg-salon-dark text-white py-4 rounded-lg font-medium hover:bg-black transition-colors shadow-md"
+              >
                 Send Message
               </button>
             </form>
@@ -85,9 +84,9 @@ export function Contact() {
                     Visit Us
                   </h4>
                   <p className="text-gray-600 text-sm leading-relaxed">
-                    123 Beauty Avenue,
+                    Galewela,
                     <br />
-                    Colombo 03,
+                    Matale,
                     <br />
                     Sri Lanka
                   </p>
@@ -153,6 +152,6 @@ export function Contact() {
           </div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }

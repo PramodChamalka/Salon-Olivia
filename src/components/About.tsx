@@ -1,31 +1,32 @@
-import React from 'react';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from "lucide-react";
 export function About() {
   const values = [
-  'Uncompromising Quality',
-  'Personalised Care',
-  'Continuous Innovation',
-  'Sustainable Practices'];
+    "Uncompromising Quality",
+    "Personalised Care",
+    "Continuous Innovation",
+    "Sustainable Practices",
+  ];
 
   const team = [
-  {
-    name: 'Nadeeka Priyangani',
-    role: 'Founder & Master Stylist',
-    image:
-    'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    name: 'Sarah Jenkins',
-    role: 'Senior Colorist',
-    image:
-    'https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  },
-  {
-    name: 'Elena Rodriguez',
-    role: 'Skincare Specialist',
-    image:
-    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
-  }];
+    {
+      name: "Nadeeka Priyangani",
+      role: "Founder & Master Stylist",
+      image:
+        "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      name: "Sarah Jenkins",
+      role: "Senior Colorist",
+      image:
+        "https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      name: "Elena Rodriguez",
+      role: "Skincare Specialist",
+      image:
+        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    },
+  ];
 
   return (
     <section id="about" className="py-20 bg-salon-cream/20">
@@ -37,8 +38,8 @@ export function About() {
             <img
               src="https://images.unsplash.com/photo-1521590832167-7bfcfaa6362f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
               alt="Salon Interior"
-              className="relative z-10 rounded-3xl shadow-xl w-full h-[500px] object-cover" />
-            
+              className="relative z-10 rounded-3xl shadow-xl w-full h-[500px] object-cover"
+            />
           </div>
 
           <div>
@@ -58,12 +59,12 @@ export function About() {
             </p>
 
             <div className="space-y-4">
-              {values.map((value, idx) =>
-              <div key={idx} className="flex items-center text-salon-dark">
+              {values.map((value, idx) => (
+                <div key={idx} className="flex items-center text-salon-dark">
                   <CheckCircle2 className="text-salon-gold mr-3" size={20} />
                   <span className="font-medium">{value}</span>
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </div>
@@ -78,14 +79,15 @@ export function About() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member, idx) =>
-            <div key={idx} className="group text-center">
+            {team.map((member, idx) => (
+              <div key={idx} className="group text-center">
                 <div className="relative overflow-hidden rounded-full w-64 h-64 mx-auto mb-6 border-4 border-white shadow-lg">
                   <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+
                   <div className="absolute inset-0 bg-salon-rose/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
                 <h4 className="font-serif text-xl font-bold text-salon-dark mb-1">
@@ -93,10 +95,10 @@ export function About() {
                 </h4>
                 <p className="text-salon-gold font-medium">{member.role}</p>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
