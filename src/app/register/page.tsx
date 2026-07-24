@@ -1,0 +1,394 @@
+"use client";
+
+import Link from "next/link";
+
+/*
+  ── Font Setup ──────────────────────────────────────────
+  See Login.tsx comment block — same font configuration applies.
+  ────────────────────────────────────────────────────────
+*/
+
+export default function Register() {
+  return (
+    <>
+      <style>{`
+        @keyframes authFadeIn {
+          from { opacity: 0; transform: translateY(16px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cardSlideUp {
+          from { opacity: 0; transform: translateY(24px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes decorFloat {
+          0%, 100% { transform: translateY(0); }
+          50%      { transform: translateY(-12px); }
+        }
+        .dot-pattern {
+          background-image: radial-gradient(circle, rgba(183,110,121,0.055) 1px, transparent 1px);
+          background-size: 28px 28px;
+        }
+        .dot-pattern-light {
+          background-image: radial-gradient(circle, rgba(183,110,121,0.025) 1px, transparent 1px);
+          background-size: 32px 32px;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+
+      <main className="min-h-screen flex items-center justify-center bg-[#FFFDF9] font-['Poppins',Arial,sans-serif] text-[#333333] antialiased">
+        {/* ═══ Container ═══ */}
+        <div
+          className="
+          flex flex-col md:flex-row
+          w-full max-w-[1100px] min-h-0 md:min-h-[680px] mx-4 md:mx-6
+          rounded-none md:rounded-[20px] overflow-hidden
+          shadow-none md:shadow-[0_12px_48px_rgba(0,0,0,0.1)]
+          animate-[authFadeIn_0.6s_cubic-bezier(0.4,0,0.2,1)_both]
+        "
+        >
+          {/* ═══ Decorative Panel ═══ */}
+          <aside
+            className="
+              relative
+              w-full md:w-[440px] md:min-w-[440px] min-h-[160px] md:min-h-0
+              bg-gradient-to-br from-[#F8D7DA] via-[#f2c4c9] to-[#ecc0c6]
+              overflow-hidden flex items-center justify-center
+              order-1 md:order-none
+            "
+            aria-hidden="true"
+          >
+            <div
+              className="absolute w-[250px] h-[250px] md:w-[420px] md:h-[420px] rounded-full bottom-[-80px] md:bottom-[-160px] left-[-60px] md:left-[-100px] animate-[decorFloat_8s_ease-in-out_infinite]"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(183,110,121,0.12) 0%, transparent 70%)",
+              }}
+            />
+            <div
+              className="absolute w-[120px] h-[120px] md:w-[200px] md:h-[200px] rounded-full top-[-30px] md:top-[-60px] right-[-20px] md:right-[-50px] animate-[decorFloat_10s_ease-in-out_infinite_reverse]"
+              style={{
+                background:
+                  "radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%)",
+              }}
+            />
+            <div className="absolute w-[50px] h-[50px] md:w-20 md:h-20 rounded-full border-[1.5px] border-[rgba(183,110,121,0.18)] top-[32%] md:top-[38%] right-[18%] md:right-[12%] animate-[decorFloat_6s_ease-in-out_infinite_1s]" />
+            <div className="absolute w-[200px] md:w-[280px] h-px bg-gradient-to-r from-transparent via-[rgba(212,175,55,0.25)] to-transparent top-[22%] left-[-40px] -rotate-[25deg]" />
+            <div className="absolute w-2 h-2 rounded-full bg-[rgba(183,110,121,0.2)] top-[30%] left-[55%]" />
+            <div className="absolute w-2 h-2 rounded-full bg-[rgba(183,110,121,0.2)] top-[34%] left-[60%]" />
+            <div className="absolute w-2 h-2 rounded-full bg-[rgba(183,110,121,0.2)] top-[32%] left-[57.5%] animate-[decorFloat_4s_ease-in-out_infinite_0.5s]" />
+            <div className="absolute inset-0 dot-pattern pointer-events-none" />
+
+            <div className="relative z-10 text-center px-10">
+              <h2 className="font-['Playfair_Display',Georgia,serif] text-[26px] md:text-[32px] font-bold text-[#333333] tracking-[0.04em] mb-2">
+                Salon Olivia
+              </h2>
+              <span className="block w-12 h-0.5 bg-[#D4AF37] mx-auto my-4 rounded-full" />
+              <p className="font-['Playfair_Display',Georgia,serif] text-[15px] md:text-lg font-normal italic text-[#666666] leading-relaxed">
+                Join the
+                <br />
+                Olivia Family
+              </p>
+              <p className="hidden md:block mt-8 text-[13px] text-[rgba(183,110,121,0.7)] tracking-[0.08em] uppercase font-medium">
+                Your beauty journey starts here
+              </p>
+            </div>
+          </aside>
+
+          {/* ═══ Form Panel ═══ */}
+          <section className="flex-1 flex items-start md:items-center justify-center py-8 px-4 md:py-12 md:px-10 bg-[#FFFDF9] relative overflow-hidden order-2 md:order-none">
+            <div className="absolute inset-0 dot-pattern-light pointer-events-none" />
+
+            {/* Card */}
+            <div
+              className="
+              relative w-full max-w-[420px] bg-white
+              rounded-[16px] md:rounded-[20px] px-6 py-8 md:px-9 md:py-10
+              shadow-none md:shadow-[0_4px_20px_rgba(0,0,0,0.08)]
+              animate-[cardSlideUp_0.5s_cubic-bezier(0.4,0,0.2,1)_0.15s_both]
+            "
+            >
+              <div className="absolute top-0 left-8 right-8 h-[3px] rounded-b-sm bg-gradient-to-r from-[#B76E79] via-[#D4AF37] to-[#B76E79]" />
+
+              <h1 className="font-['Playfair_Display',Georgia,serif] text-[26px] md:text-[32px] font-bold text-[#333333] leading-[1.2] tracking-[0.02em] mb-1.5">
+                Create Account
+              </h1>
+              <p className="text-sm text-[#666666] mb-8 leading-relaxed">
+                Fill in your details to get started
+              </p>
+
+              <form noValidate>
+                {/* First & Last Name */}
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-3.5 mb-5">
+                  <div className="flex-1">
+                    <label
+                      htmlFor="reg-firstname"
+                      className="block text-sm font-medium text-[#333333] mb-1.5"
+                    >
+                      First Name
+                    </label>
+                    <input
+                      id="reg-firstname"
+                      type="text"
+                      className="
+                        w-full h-[50px] px-4
+                        border border-[#CCCCCC] rounded-[10px]
+                        bg-white text-[15px] text-[#333333]
+                        placeholder:text-[#666666] placeholder:text-sm
+                        outline-none appearance-none
+                        transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                        hover:border-[#b0b0b0]
+                        focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                        focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                      "
+                      placeholder="Olivia"
+                      autoComplete="given-name"
+                      required
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <label
+                      htmlFor="reg-lastname"
+                      className="block text-sm font-medium text-[#333333] mb-1.5"
+                    >
+                      Last Name
+                    </label>
+                    <input
+                      id="reg-lastname"
+                      type="text"
+                      className="
+                        w-full h-[50px] px-4
+                        border border-[#CCCCCC] rounded-[10px]
+                        bg-white text-[15px] text-[#333333]
+                        placeholder:text-[#666666] placeholder:text-sm
+                        outline-none appearance-none
+                        transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                        hover:border-[#b0b0b0]
+                        focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                        focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                      "
+                      placeholder="Smith"
+                      autoComplete="family-name"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="mb-5">
+                  <label
+                    htmlFor="reg-email"
+                    className="block text-sm font-medium text-[#333333] mb-1.5"
+                  >
+                    Email Address
+                  </label>
+                  <input
+                    id="reg-email"
+                    type="email"
+                    className="
+                      w-full h-[50px] px-4
+                      border border-[#CCCCCC] rounded-[10px]
+                      bg-white text-[15px] text-[#333333]
+                      placeholder:text-[#666666] placeholder:text-sm
+                      outline-none appearance-none
+                      transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                      hover:border-[#b0b0b0]
+                      focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                      focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                    "
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+
+                {/* Phone */}
+                <div className="mb-5">
+                  <label
+                    htmlFor="reg-phone"
+                    className="block text-sm font-medium text-[#333333] mb-1.5"
+                  >
+                    Phone Number
+                  </label>
+                  <input
+                    id="reg-phone"
+                    type="tel"
+                    className="
+                      w-full h-[50px] px-4
+                      border border-[#CCCCCC] rounded-[10px]
+                      bg-white text-[15px] text-[#333333]
+                      placeholder:text-[#666666] placeholder:text-sm
+                      outline-none appearance-none
+                      transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                      hover:border-[#b0b0b0]
+                      focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                      focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                    "
+                    placeholder="+1 (555) 000-0000"
+                    autoComplete="tel"
+                    required
+                  />
+                </div>
+
+                {/* Date of Birth */}
+                <div className="mb-5">
+                  <label
+                    htmlFor="reg-birthday"
+                    className="block text-sm font-medium text-[#333333] mb-1.5"
+                  >
+                    Date of Birth
+                  </label>
+                  <input
+                    id="reg-birthday"
+                    type="date"
+                    className="
+                      w-full h-[50px] px-4
+                      border border-[#CCCCCC] rounded-[10px]
+                      bg-white text-[15px] text-[#333333]
+                      outline-none appearance-none
+                      transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                      hover:border-[#b0b0b0]
+                      focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                      focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                      [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                      [&::-webkit-calendar-picker-indicator]:opacity-50
+                      hover:[&::-webkit-calendar-picker-indicator]:opacity-80
+                    "
+                    autoComplete="bday"
+                    required
+                  />
+                </div>
+
+                {/* Address */}
+                <div className="mb-5">
+                  <label
+                    htmlFor="reg-address"
+                    className="block text-sm font-medium text-[#333333] mb-1.5"
+                  >
+                    Address
+                  </label>
+                  <input
+                    id="reg-address"
+                    type="text"
+                    className="
+                      w-full h-[50px] px-4
+                      border border-[#CCCCCC] rounded-[10px]
+                      bg-white text-[15px] text-[#333333]
+                      placeholder:text-[#666666] placeholder:text-sm
+                      outline-none appearance-none
+                      transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                      hover:border-[#b0b0b0]
+                      focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                      focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                    "
+                    placeholder="123 Beauty Lane, Suite 4"
+                    autoComplete="street-address"
+                    required
+                  />
+                </div>
+
+                {/* Password */}
+                <div className="mb-5">
+                  <label
+                    htmlFor="reg-password"
+                    className="block text-sm font-medium text-[#333333] mb-1.5"
+                  >
+                    Password
+                  </label>
+                  <input
+                    id="reg-password"
+                    type="password"
+                    className="
+                      w-full h-[50px] px-4
+                      border border-[#CCCCCC] rounded-[10px]
+                      bg-white text-[15px] text-[#333333]
+                      placeholder:text-[#666666] placeholder:text-sm
+                      outline-none appearance-none
+                      transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                      hover:border-[#b0b0b0]
+                      focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                      focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                    "
+                    placeholder="Create a strong password"
+                    autoComplete="new-password"
+                    required
+                  />
+                </div>
+
+                {/* Confirm Password */}
+                <div className="mb-6">
+                  <label
+                    htmlFor="reg-confirm"
+                    className="block text-sm font-medium text-[#333333] mb-1.5"
+                  >
+                    Confirm Password
+                  </label>
+                  <input
+                    id="reg-confirm"
+                    type="password"
+                    className="
+                      w-full h-[50px] px-4
+                      border border-[#CCCCCC] rounded-[10px]
+                      bg-white text-[15px] text-[#333333]
+                      placeholder:text-[#666666] placeholder:text-sm
+                      outline-none appearance-none
+                      transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                      hover:border-[#b0b0b0]
+                      focus:border-[#B76E79] focus:border-2 focus:px-[15px]
+                      focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
+                    "
+                    placeholder="Re-enter your password"
+                    autoComplete="new-password"
+                    required
+                  />
+                </div>
+
+                {/* Submit */}
+                <button
+                  type="submit"
+                  className="
+                    flex items-center justify-center
+                    w-full h-[50px] px-8
+                    bg-[#B76E79] text-white
+                    border-none rounded-[10px]
+                    font-['Poppins',Arial,sans-serif] text-base font-medium
+                    cursor-pointer
+                    shadow-[0_4px_14px_rgba(183,110,121,0.35)]
+                    transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
+                    hover:bg-[#D4AF37] hover:shadow-[0_4px_14px_rgba(212,175,55,0.35)]
+                    active:scale-[0.97]
+                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]
+                  "
+                >
+                  Create Account
+                </button>
+              </form>
+
+              {/* Login link */}
+              <p className="text-center mt-7 text-sm text-[#666666]">
+                Already have an account?{" "}
+                <Link
+                  href="/login"
+                  className="
+                    text-[#B76E79] font-medium no-underline
+                    transition-colors duration-300
+                    hover:text-[#D4AF37] hover:underline
+                    focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B76E79] rounded-sm
+                  "
+                >
+                  Sign in here
+                </Link>
+              </p>
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
+  );
+}

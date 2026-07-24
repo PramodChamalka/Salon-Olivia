@@ -2,12 +2,11 @@
   "name": "salon-olivia-next",
   "version": "0.0.1",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
-  },
+"scripts": {
+  "dev": "next dev --webpack",
+  "build": "next build",
+  "start": "next start"
+},
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "lucide-react": "0.522.0",

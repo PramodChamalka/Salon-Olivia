@@ -1,52 +1,75 @@
 "use client";
-import { useState, Fragment } from "react";
-import { MessageSquare, X, Sparkles, ChevronRight } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { MessageSquare, X, Sparkles, Send } from "lucide-react";
+
+type ChatMessage = {
+  role: "user" | "assistant";
+  text: string;
+};
+
 export function AIAdvisor() {
   const [isOpen, setIsOpen] = useState(false);
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const questions = [
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: "hairType",
-      text: "Hi there! I'm your AI Style Advisor. What's your hair type?",
-      options: ["Straight", "Wavy", "Curly", "Coily"],
+      role: "assistant",
+      text: "Hi there! I'm Olivia AI, your Style Advisor. Ask me anything about our services, pricing, or what might suit you.",
     },
-    {
-      id: "occasion",
-      text: "Great! What's the occasion you're preparing for?",
-      options: ["Everyday Look", "Wedding", "Party/Event", "Professional"],
-    },
-    {
-      id: "budget",
-      text: "Got it. Finally, what's your budget range?",
-      options: ["Under LKR 5k", "LKR 5k - 15k", "LKR 15k+"],
-    },
-  ];
+  ]);
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-  const recommendations = [
-    {
-      name: "Signature Blowout",
-      desc: "Perfect for your wavy hair to get that everyday polished look.",
-      price: "LKR 4,500",
-    },
-    {
-      name: "Keratin Express",
-      desc: "Smooth frizz and add shine that lasts for weeks.",
-      price: "LKR 12,000",
-    },
-  ];
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, isLoading]);
 
-  const handleOptionClick = (questionId: string, option: string) => {
-    setAnswers({
-      ...answers,
-      [questionId]: option,
-    });
-    setStep(step + 1);
+  const sendMessage = async () => {
+    const question = input.trim();
+    if (!question || isLoading) return;
+
+    setMessages((prev) => [...prev, { role: "user", text: question }]);
+    setInput("");
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch("http://localhost:8000/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Adjust this line to match whatever key your FastAPI endpoint
+      // actually returns, e.g. data.answer, data.response, data.reply
+      const answer =
+        data.answer ??
+        data.response ??
+        "Sorry, I didn't get a response for that.";
+
+      setMessages((prev) => [...prev, { role: "assistant", text: answer }]);
+    } catch (err) {
+      console.error(err);
+      setError("Something went wrong reaching the advisor. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
-  const resetChat = () => {
-    setStep(0);
-    setAnswers({});
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
   };
+
   return (
     <>
       {/* Floating Button */}
@@ -85,94 +108,61 @@ export function AIAdvisor() {
 
           {/* Chat Body */}
           <div className="flex-1 p-4 overflow-y-auto bg-gray-50 flex flex-col gap-4">
-            {/* Show previous questions and answers */}
-            {questions.slice(0, step).map((q, idx) => (
-              <Fragment key={idx}>
-                <div className="flex items-start">
-                  <div className="bg-salon-cream text-salon-dark p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm shadow-sm">
-                    {q.text}
+            {messages.map((msg, idx) =>
+              msg.role === "assistant" ? (
+                <div key={idx} className="flex items-start animate-in fade-in">
+                  <div className="bg-salon-cream text-salon-dark p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm shadow-sm whitespace-pre-wrap">
+                    {msg.text}
                   </div>
                 </div>
-                <div className="flex items-start justify-end">
-                  <div className="bg-salon-dark text-white p-3 rounded-2xl rounded-tr-none max-w-[80%] text-sm shadow-sm">
-                    {answers[q.id]}
-                  </div>
-                </div>
-              </Fragment>
-            ))}
-
-            {/* Current Question */}
-            {step < questions.length && (
-              <div className="flex items-start animate-in fade-in">
-                <div className="bg-salon-cream text-salon-dark p-3 rounded-2xl rounded-tl-none max-w-[80%] text-sm shadow-sm">
-                  {questions[step].text}
-                </div>
-              </div>
-            )}
-
-            {/* Recommendations */}
-            {step === questions.length && (
-              <div className="animate-in fade-in slide-in-from-bottom-4">
-                <div className="flex items-start mb-4">
-                  <div className="bg-salon-cream text-salon-dark p-3 rounded-2xl rounded-tl-none max-w-[90%] text-sm shadow-sm">
-                    Based on your preferences ({answers.hairType},{" "}
-                    {answers.occasion}, {answers.budget}), here are my top
-                    recommendations for you:
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  {recommendations.map((rec, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-white border border-salon-gold/30 p-3 rounded-xl shadow-sm"
-                    >
-                      <h4 className="font-serif font-bold text-salon-dark text-sm">
-                        {rec.name}
-                      </h4>
-                      <p className="text-xs text-gray-500 mt-1 mb-2">
-                        {rec.desc}
-                      </p>
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-semibold text-salon-gold">
-                          {rec.price}
-                        </span>
-                        <button className="text-xs bg-salon-dark text-white px-3 py-1 rounded hover:bg-black transition-colors">
-                          Book This
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={resetChat}
-                  className="w-full mt-4 text-xs text-gray-500 hover:text-salon-dark text-center"
+              ) : (
+                <div
+                  key={idx}
+                  className="flex items-start justify-end animate-in fade-in"
                 >
-                  Start Over
-                </button>
+                  <div className="bg-salon-dark text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm shadow-sm whitespace-pre-wrap">
+                    {msg.text}
+                  </div>
+                </div>
+              ),
+            )}
+
+            {isLoading && (
+              <div className="flex items-start animate-in fade-in">
+                <div className="bg-salon-cream text-salon-dark p-3 rounded-2xl rounded-tl-none text-sm shadow-sm flex gap-1 items-center">
+                  <span className="w-1.5 h-1.5 bg-salon-dark/50 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1.5 h-1.5 bg-salon-dark/50 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1.5 h-1.5 bg-salon-dark/50 rounded-full animate-bounce" />
+                </div>
               </div>
             )}
+
+            {error && (
+              <div className="text-xs text-red-500 text-center">{error}</div>
+            )}
+
+            <div ref={bottomRef} />
           </div>
 
-          {/* Options Footer */}
-          {step < questions.length && (
-            <div className="p-4 bg-white border-t border-gray-100">
-              <div className="flex flex-wrap gap-2">
-                {questions[step].options.map((option, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() =>
-                      handleOptionClick(questions[step].id, option)
-                    }
-                    className="text-xs border border-salon-gold text-salon-dark px-3 py-2 rounded-full hover:bg-salon-gold hover:text-white transition-colors flex items-center"
-                  >
-                    {option} <ChevronRight size={12} className="ml-1" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Input Footer */}
+          <div className="p-3 bg-white border-t border-gray-100 flex items-center gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask about services, pricing..."
+              disabled={isLoading}
+              className="flex-1 text-sm border border-gray-200 rounded-full px-4 py-2 focus:outline-none focus:border-salon-gold disabled:opacity-50"
+            />
+            <button
+              onClick={sendMessage}
+              disabled={isLoading || !input.trim()}
+              className="bg-salon-dark text-white p-2 rounded-full hover:bg-black transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <Send size={16} />
+            </button>
+          </div>
         </div>
       )}
     </>
