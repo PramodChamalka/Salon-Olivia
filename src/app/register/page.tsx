@@ -1,14 +1,13 @@
 "use client";
-
 import Link from "next/link";
-
-/*
-  ── Font Setup ──────────────────────────────────────────
-  See Login.tsx comment block — same font configuration applies.
-  ────────────────────────────────────────────────────────
-*/
+import { useActionState } from "react";
+import { registerAction, type AuthState } from "@/app/auth/actions";
 
 export default function Register() {
+  const [state, formAction, isPending] = useActionState<AuthState, FormData>(
+    registerAction,
+    {}
+  );
   return (
     <>
       <style>{`
@@ -122,7 +121,12 @@ export default function Register() {
                 Fill in your details to get started
               </p>
 
-              <form noValidate>
+              <form action={formAction} noValidate>
+                {state.error && (
+                  <div role="alert" className="mb-5 rounded-[10px] border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {state.error}
+                  </div>
+                )}
                 {/* First & Last Name */}
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-3.5 mb-5">
                   <div className="flex-1">
@@ -134,6 +138,7 @@ export default function Register() {
                     </label>
                     <input
                       id="reg-firstname"
+                      name="firstName"
                       type="text"
                       className="
                         w-full h-[50px] px-4
@@ -161,6 +166,7 @@ export default function Register() {
                     </label>
                     <input
                       id="reg-lastname"
+                      name="lastName"
                       type="text"
                       className="
                         w-full h-[50px] px-4
@@ -190,6 +196,7 @@ export default function Register() {
                   </label>
                   <input
                     id="reg-email"
+                    name="email"
                     type="email"
                     className="
                       w-full h-[50px] px-4
@@ -218,6 +225,7 @@ export default function Register() {
                   </label>
                   <input
                     id="reg-phone"
+                    name="phone"
                     type="tel"
                     className="
                       w-full h-[50px] px-4
@@ -246,6 +254,7 @@ export default function Register() {
                   </label>
                   <input
                     id="reg-birthday"
+                    name="birthday"
                     type="date"
                     className="
                       w-full h-[50px] px-4
@@ -275,6 +284,7 @@ export default function Register() {
                   </label>
                   <input
                     id="reg-address"
+                    name="address"
                     type="text"
                     className="
                       w-full h-[50px] px-4
@@ -303,6 +313,7 @@ export default function Register() {
                   </label>
                   <input
                     id="reg-password"
+                    name="password"
                     type="password"
                     className="
                       w-full h-[50px] px-4
@@ -331,6 +342,7 @@ export default function Register() {
                   </label>
                   <input
                     id="reg-confirm"
+                    name="confirmPassword"
                     type="password"
                     className="
                       w-full h-[50px] px-4
@@ -352,6 +364,7 @@ export default function Register() {
                 {/* Submit */}
                 <button
                   type="submit"
+                  disabled={isPending}
                   className="
                     flex items-center justify-center
                     w-full h-[50px] px-8
@@ -364,9 +377,10 @@ export default function Register() {
                     hover:bg-[#D4AF37] hover:shadow-[0_4px_14px_rgba(212,175,55,0.35)]
                     active:scale-[0.97]
                     focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]
+                    disabled:opacity-60 disabled:cursor-not-allowed
                   "
                 >
-                  Create Account
+                  {isPending ? "Creating account…" : "Create Account"}
                 </button>
               </form>
 

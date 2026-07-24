@@ -1,4 +1,3 @@
-import React from "react";
 import { Clock3, ShieldCheck, HeartHandshake, Sparkles, Scissors, Smile } from "lucide-react";
 
 const features = [
