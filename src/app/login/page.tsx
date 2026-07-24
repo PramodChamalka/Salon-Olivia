@@ -1,32 +1,18 @@
 "use client";
-
 import Link from "next/link";
+import { Suspense } from "react";
+import { useActionState } from "react";
+import { useSearchParams } from "next/navigation";
+import { loginAction, type AuthState } from "@/app/auth/actions";
 
-/*
-  ── Font Setup ──────────────────────────────────────────
-  Add to your layout.tsx for optimal loading:
-
-    import { Playfair_Display, Poppins } from "next/font/google";
-
-    const playfair = Playfair_Display({
-      subsets: ["latin"],
-      variable: "--font-playfair",
-      weight: ["400", "600", "700"],
-      style: ["normal", "italic"],
-    });
-
-    const poppins = Poppins({
-      subsets: ["latin"],
-      variable: "--font-poppins",
-      weight: ["300", "400", "500", "600", "700"],
-    });
-
-  Then wrap your <html> with className={`${playfair.variable} ${poppins.variable}`}
-  and replace font-['...'] below with font-[var(--font-playfair)] / font-[var(--font-poppins)]
-  ────────────────────────────────────────────────────────
-*/
-
-export default function Login() {
+function LoginForm() {
+  const [state, formAction, isPending] = useActionState<AuthState, FormData>(
+    loginAction,
+    {}
+  );
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams?.get("redirect") ?? "";
+  const justRegistered = searchParams?.get("registered") === "1";
   return (
     <>
       <style>{`
@@ -166,7 +152,20 @@ export default function Login() {
                 Sign in to your account to continue
               </p>
 
-              <form noValidate>
+              <form action={formAction} noValidate>
+                <input type="hidden" name="redirect" value={redirectTo} />
+
+                {justRegistered && (
+                  <div className="mb-5 rounded-[10px] border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-800">
+                    Account created successfully. Please sign in.
+                  </div>
+                )}
+
+                {state.error && (
+                  <div role="alert" className="mb-5 rounded-[10px] border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {state.error}
+                  </div>
+                )}
                 {/* Email */}
                 <div className="mb-5">
                   <label
@@ -177,6 +176,7 @@ export default function Login() {
                   </label>
                   <input
                     id="login-email"
+                    name="email"
                     type="email"
                     className="
                       w-full h-[50px] px-4
@@ -205,6 +205,7 @@ export default function Login() {
                   </label>
                   <input
                     id="login-password"
+                    name="password"
                     type="password"
                     className="
                       w-full h-[50px] px-4
@@ -242,6 +243,7 @@ export default function Login() {
                 {/* Sign In */}
                 <button
                   type="submit"
+                  disabled={isPending}
                   className="
                     flex items-center justify-center
                     w-full h-[50px] px-8
@@ -254,9 +256,10 @@ export default function Login() {
                     hover:bg-[#D4AF37] hover:shadow-[0_4px_14px_rgba(212,175,55,0.35)]
                     active:scale-[0.97]
                     focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D4AF37]
+                    disabled:opacity-60 disabled:cursor-not-allowed
                   "
                 >
-                  Sign In
+                  {isPending ? "Signing in…" : "Sign In"}
                 </button>
               </form>
 
@@ -378,5 +381,13 @@ export default function Login() {
         </div>
       </main>
     </>
+  );
+}
+
+export default function Login() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

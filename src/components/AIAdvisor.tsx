@@ -7,8 +7,13 @@ type ChatMessage = {
   text: string;
 };
 
-export function AIAdvisor() {
-  const [isOpen, setIsOpen] = useState(false);
+type AIAdvisorProps = {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  variant?: "floating" | "embedded";
+};
+
+export function AIAdvisor({ isOpen, setIsOpen, variant = "floating" }: AIAdvisorProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "assistant",
@@ -73,7 +78,7 @@ export function AIAdvisor() {
   return (
     <>
       {/* Floating Button */}
-      {!isOpen && (
+      {variant === "floating" && !isOpen && (
         <button
           onClick={() => setIsOpen(true)}
           className="fixed bottom-6 right-6 bg-salon-dark text-white p-4 rounded-full shadow-2xl hover:bg-black transition-transform hover:scale-105 z-50 flex items-center group"
@@ -86,7 +91,13 @@ export function AIAdvisor() {
 
       {/* Chat Widget */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden border border-gray-100 flex flex-col h-[500px] animate-in slide-in-from-bottom-10">
+        <div
+          className={
+            variant === "floating"
+              ? "fixed bottom-6 right-6 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl z-50 overflow-hidden border border-gray-100 flex flex-col h-[500px] animate-in slide-in-from-bottom-10"
+              : "w-full bg-white rounded-2xl overflow-hidden border border-gray-100 flex flex-col h-[600px]"
+          }
+        >
           {/* Header */}
           <div className="bg-salon-dark text-white p-4 flex justify-between items-center">
             <div className="flex items-center">
@@ -98,12 +109,14 @@ export function AIAdvisor() {
                 <p className="text-xs text-gray-300">Style Advisor</p>
               </div>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-gray-300 hover:text-white"
-            >
-              <X size={20} />
-            </button>
+            {variant === "floating" && (
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-gray-300 hover:text-white"
+              >
+                <X size={20} />
+              </button>
+            )}
           </div>
 
           {/* Chat Body */}
