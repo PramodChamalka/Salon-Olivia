@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { Navbar } from "./Navbar";
@@ -9,20 +9,32 @@ import { AIAdvisor } from "./AIAdvisor";
 
 type PageShellProps = {
   children: ReactNode;
+  hideFloatingChat?: boolean;
 };
 
-export function PageShell({ children }: PageShellProps) {
+export function PageShell({ children, hideFloatingChat = false }: PageShellProps) {
+  const [chatOpen, setChatOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <Navbar />
       <main className="pt-20">{children}</main>
       <Footer />
-      <AIAdvisor />
+      {!hideFloatingChat && (
+        <AIAdvisor isOpen={chatOpen} setIsOpen={setChatOpen} />
+      )}
       <Link
         href="https://wa.me/94771234567"
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-24 right-6 z-50 flex items-center rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-2xl transition-transform hover:scale-105"
+        aria-hidden={chatOpen}
+        tabIndex={chatOpen ? -1 : 0}
+        className={`fixed right-6 z-40 flex items-center rounded-full bg-[#25D366] px-4 py-3 text-sm font-semibold text-white shadow-2xl transition-all duration-300 ${
+          chatOpen
+            ? "pointer-events-none translate-y-4 opacity-0"
+            : "bottom-24 hover:scale-105"
+        }`}
+        style={chatOpen ? { bottom: "1.5rem" } : undefined}
       >
         <MessageCircle size={18} className="mr-2" />
         WhatsApp
