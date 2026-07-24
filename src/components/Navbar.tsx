@@ -1,9 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -11,78 +14,46 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   const navLinks = [
-    {
-      name: "Home",
-      href: "#home",
-    },
-    {
-      name: "About",
-      href: "#about",
-    },
-    {
-      name: "Services",
-      href: "#services",
-    },
-    {
-      name: "Gallery",
-      href: "#gallery",
-    },
-    {
-      name: "Appointments",
-      href: "#appointments",
-    },
-    {
-      name: "Contact",
-      href: "#contact",
-    },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Services", href: "/services" },
+    { name: "Gallery", href: "/gallery" },
+    { name: "Contact", href: "/contact" },
   ];
 
-  const scrollToSection = (href: string) => {
-    setMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({
-        behavior: "smooth",
-      });
-    }
-  };
   return (
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white shadow-md py-3" : "bg-white/90 backdrop-blur-sm py-5"}`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          <div
-            className="flex-shrink-0 cursor-pointer"
-            onClick={() => scrollToSection("#home")}
-          >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          <Link href="/" className="flex-shrink-0">
             <span className="font-serif text-2xl font-bold text-salon-dark">
               Salon Olivia
             </span>
-          </div>
+          </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden items-center space-x-8 md:flex">
             {navLinks.map((link) => (
-              <button
+              <Link
                 key={link.name}
-                onClick={() => scrollToSection(link.href)}
-                className="text-gray-600 hover:text-salon-gold transition-colors font-medium text-sm uppercase tracking-wider"
+                href={link.href}
+                className="text-sm font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-salon-gold"
               >
                 {link.name}
-              </button>
+              </Link>
             ))}
-            <button
-              onClick={() => scrollToSection("#appointments")}
-              className="bg-salon-gold text-white px-6 py-2 rounded-full font-medium hover:bg-yellow-600 transition-colors shadow-sm"
+            <Link
+              href="/appointment"
+              className="rounded-full bg-salon-gold px-6 py-2 font-medium text-white shadow-sm transition-colors hover:bg-yellow-600"
             >
               Book Now
-            </button>
+            </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          <div className="flex items-center md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-gray-600 hover:text-salon-dark focus:outline-none"
@@ -93,25 +64,26 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="absolute w-full border-t border-gray-100 bg-white shadow-lg md:hidden">
+          <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
             {navLinks.map((link) => (
-              <button
+              <Link
                 key={link.name}
-                onClick={() => scrollToSection(link.href)}
-                className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-salon-gold hover:bg-salon-cream rounded-md"
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-salon-cream hover:text-salon-gold"
               >
                 {link.name}
-              </button>
+              </Link>
             ))}
-            <button
-              onClick={() => scrollToSection("#appointments")}
-              className="block w-full text-center mt-4 bg-salon-gold text-white px-6 py-3 rounded-md font-medium hover:bg-yellow-600 transition-colors"
+            <Link
+              href="/appointment"
+              onClick={() => setMobileMenuOpen(false)}
+              className="mt-4 block w-full rounded-md bg-salon-gold px-6 py-3 text-center font-medium text-white transition-colors hover:bg-yellow-600"
             >
               Book Now
-            </button>
+            </Link>
           </div>
         </div>
       )}
