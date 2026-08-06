@@ -6,6 +6,7 @@ import { MessageCircle } from "lucide-react";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { AIAdvisor } from "./AIAdvisor";
+import { WelcomeTour } from "./WelcomeTour";
 
 type PageShellProps = {
   children: ReactNode;
@@ -17,6 +18,7 @@ export function PageShell({ children, hideFloatingChat = false }: PageShellProps
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
+      <WelcomeTour />
       <Navbar />
       <main className="pt-20">{children}</main>
       <Footer />

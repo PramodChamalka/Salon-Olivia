@@ -128,7 +128,9 @@ create trigger profiles_guard_fields
 -- ---------------------------------------------------------------------
 -- Create a profile automatically on signup  (FR1.1)
 -- Reads the metadata passed from registerAction in
--- src/app/auth/actions.ts
+-- src/app/auth/actions.ts for email/password signups, and falls back
+-- to the Google OAuth claims (full_name/name/avatar_url/picture) that
+-- Supabase populates automatically for "Sign in with Google".
 -- ---------------------------------------------------------------------
 create or replace function public.handle_new_user()
 returns trigger
@@ -136,15 +138,35 @@ language plpgsql
 security definer
 set search_path = public
 as $$
+declare
+  full_name  text;
+  name_parts text[];
 begin
-  insert into public.profiles (id, first_name, last_name, phone, birthday, address)
+  full_name := nullif(trim(coalesce(
+    new.raw_user_meta_data ->> 'full_name',
+    new.raw_user_meta_data ->> 'name',
+    ''
+  )), '');
+  name_parts := case when full_name is not null
+    then regexp_split_to_array(full_name, '\s+')
+    else null
+  end;
+
+  insert into public.profiles (id, first_name, last_name, phone, birthday, address, avatar_url)
   values (
     new.id,
-    new.raw_user_meta_data ->> 'first_name',
-    new.raw_user_meta_data ->> 'last_name',
+    coalesce(new.raw_user_meta_data ->> 'first_name', name_parts[1]),
+    coalesce(
+      new.raw_user_meta_data ->> 'last_name',
+      case when array_length(name_parts, 1) > 1
+        then array_to_string(name_parts[2:array_length(name_parts, 1)], ' ')
+        else null
+      end
+    ),
     new.raw_user_meta_data ->> 'phone',
     nullif(new.raw_user_meta_data ->> 'birthday', '')::date,
-    new.raw_user_meta_data ->> 'address'
+    new.raw_user_meta_data ->> 'address',
+    coalesce(new.raw_user_meta_data ->> 'avatar_url', new.raw_user_meta_data ->> 'picture')
   );
   return new;
 end;
@@ -166,6 +188,24 @@ create table public.login_attempts (
 );
 
 alter table public.login_attempts enable row level security;
+
+-- ---------------------------------------------------------------------
+-- Post-install: enable Google as a sign-in provider.
+--
+-- This is dashboard configuration, not SQL, and cannot be scripted here:
+--   1. Supabase Dashboard -> Authentication -> Sign In / Up -> Auth
+--      Providers -> Google -> toggle "Enable Sign in with Google".
+--   2. Create an OAuth 2.0 Client ID (type: Web application) in the
+--      Google Cloud Console, and add the Supabase callback URL shown
+--      on that provider page (https://<project-ref>.supabase.co/auth/v1/callback)
+--      as an authorized redirect URI.
+--   3. Paste the resulting Client ID and Client Secret into the
+--      Supabase provider page and save.
+--   4. Under Authentication -> URL Configuration, add this app's
+--      /auth/callback URL (e.g. https://yourdomain.com/auth/callback,
+--      plus http://localhost:3000/auth/callback for local dev) to the
+--      Redirect URLs allow list.
+-- ---------------------------------------------------------------------
 
 -- ---------------------------------------------------------------------
 -- Post-install: promote the first admin manually.
