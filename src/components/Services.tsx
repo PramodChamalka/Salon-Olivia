@@ -87,7 +87,7 @@ export function Services({ variant = "full" }: ServicesProps) {
                   </span>
                   <Link
                     href={`/services/${service.id}`}
-                    className="text-sm font-semibold text-salon-gold transition-colors hover:text-salon-dark"
+                    className="text-sm font-thin text-salon-gold transition-colors hover:text-salon-dark"
                   >
                     Learn More
                   </Link>

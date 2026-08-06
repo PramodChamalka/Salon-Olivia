@@ -69,7 +69,11 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 py-5 bg-stone-100 rounded-lg sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex-shrink-0" data-tour="nav-brand">
+          <Link
+            href="/"
+            className="flex-shrink-0 inline-block"
+            data-tour="nav-brand"
+          >
             <span className="font-serif text-2xl font-bold text-salon-dark">
               Salon Olivia
             </span>
@@ -170,7 +174,7 @@ export function Navbar() {
             <Link
               href="/appointment"
               onClick={() => setMobileMenuOpen(false)}
-              className="mt-4 block w-full rounded-md bg-salon-gold px-6 py-3 text-center font-medium text-white transition-colors hover:bg-yellow-600"
+              className="mt-3 block w-full rounded-xl bg-salon-gold px-4 py-3 text-center text-sm font-semibold text-white shadow-md transition-colors hover:bg-yellow-600"
             >
               Book Now
             </Link>
