@@ -8,7 +8,9 @@ import { User as UserIcon, ChevronDown } from "lucide-react";
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<{ email: string; firstName: string } | null>(null);
+  const [user, setUser] = useState<{ email: string; firstName: string } | null>(
+    null,
+  );
   const [loadingUser, setLoadingUser] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -16,7 +18,9 @@ export function Navbar() {
     const supabase = createClient();
 
     const loadUser = async () => {
-      const { data: { user: authUser } } = await supabase.auth.getUser();
+      const {
+        data: { user: authUser },
+      } = await supabase.auth.getUser();
       if (!authUser) {
         setUser(null);
         setLoadingUser(false);
@@ -63,7 +67,7 @@ export function Navbar() {
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white shadow-md py-3" : "bg-white/90 backdrop-blur-sm py-5"}`}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-5 bg-stone-100 rounded-lg sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           <Link href="/" className="flex-shrink-0">
             <span className="font-serif text-2xl font-bold text-salon-dark">
@@ -87,8 +91,8 @@ export function Navbar() {
             >
               Book Now
             </Link>
-            {!loadingUser && (
-              user ? (
+            {!loadingUser &&
+              (user ? (
                 <div className="relative">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -97,13 +101,17 @@ export function Navbar() {
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-salon-gold text-xs font-semibold uppercase text-white">
                       {user.firstName.charAt(0)}
                     </span>
-                    <span className="max-w-[120px] truncate">{user.firstName}</span>
+                    <span className="max-w-[120px] truncate">
+                      {user.firstName}
+                    </span>
                     <ChevronDown size={16} />
                   </button>
                   {userMenuOpen && (
                     <div className="absolute right-0 mt-3 w-52 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
                       <div className="border-b border-gray-100 px-4 py-3">
-                        <p className="truncate text-xs text-gray-500">{user.email}</p>
+                        <p className="truncate text-xs text-gray-500">
+                          {user.email}
+                        </p>
                       </div>
                       <a
                         href="/logout"
@@ -122,8 +130,7 @@ export function Navbar() {
                   <UserIcon size={16} />
                   Sign In
                 </Link>
-              )
-            )}
+              ))}
           </div>
 
           <div className="flex items-center md:hidden">
@@ -157,11 +164,13 @@ export function Navbar() {
             >
               Book Now
             </Link>
-            {!loadingUser && (
-              user ? (
+            {!loadingUser &&
+              (user ? (
                 <>
                   <div className="mt-4 border-t border-gray-100 px-3 pt-3">
-                    <p className="truncate text-xs text-gray-500">{user.email}</p>
+                    <p className="truncate text-xs text-gray-500">
+                      {user.email}
+                    </p>
                   </div>
                   <a
                     href="/logout"
@@ -178,8 +187,7 @@ export function Navbar() {
                 >
                   Sign In
                 </Link>
-              )
-            )}
+              ))}
           </div>
         </div>
       )}
