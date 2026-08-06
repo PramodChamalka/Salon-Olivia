@@ -21,7 +21,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-salon-dark pb-8 pt-16 text-white">
+    <footer className="bg-[#666666] pb-8 pt-16 text-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -115,10 +115,10 @@ export function Footer() {
         </div>
 
         <div className="flex flex-col items-center justify-between border-t border-gray-800 pt-8 md:flex-row">
-          <p className="mb-4 text-sm text-gray-500 md:mb-0">
+          <p className="mb-4 text-sm text-white md:mb-0">
             © 2026 Salon Olivia. All Rights Reserved.
           </p>
-          <div className="flex space-x-6 text-sm text-gray-500">
+          <div className="flex space-x-6 text-sm text-white">
             <a href="#" className="transition-colors hover:text-salon-gold">
               Privacy Policy
             </a>

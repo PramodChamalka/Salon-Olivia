@@ -58,24 +58,6 @@ export default function LandingPage() {
         <Gallery variant="preview" />
         <Stats />
         <Testimonials variant="preview" />
-
-        <section className="bg-salon-cream/40 py-20">
-          <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-            <h2 className="mb-4 font-serif text-4xl font-bold text-salon-dark">
-              Ready for Your Special Day?
-            </h2>
-            <p className="mx-auto mb-8 max-w-2xl text-lg text-gray-600">
-              Let our team create a look that feels effortless, elevated, and
-              entirely you.
-            </p>
-            <Link
-              href="/appointment"
-              className="inline-flex rounded-full bg-salon-dark px-8 py-3 font-medium text-white transition-colors hover:bg-black"
-            >
-              Book Today
-            </Link>
-          </div>
-        </section>
       </div>
     </PageShell>
   );
