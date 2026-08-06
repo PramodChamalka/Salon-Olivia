@@ -69,7 +69,7 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 py-5 bg-stone-100 rounded-lg sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
-          <Link href="/" className="flex-shrink-0">
+          <Link href="/" className="flex-shrink-0" data-tour="nav-brand">
             <span className="font-serif text-2xl font-bold text-salon-dark">
               Salon Olivia
             </span>
@@ -80,6 +80,7 @@ export function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
+                data-tour={`nav-${link.name.toLowerCase()}`}
                 className="text-sm font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-salon-gold"
               >
                 {link.name}
@@ -87,13 +88,14 @@ export function Navbar() {
             ))}
             <Link
               href="/appointment"
+              data-tour="nav-book-now"
               className="rounded-full bg-salon-gold px-6 py-2 font-medium text-white shadow-sm transition-colors hover:bg-yellow-600"
             >
               Book Now
             </Link>
             {!loadingUser &&
               (user ? (
-                <div className="relative">
+                <div className="relative" data-tour="nav-account">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
                     className="flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-salon-gold"
@@ -113,9 +115,16 @@ export function Navbar() {
                           {user.email}
                         </p>
                       </div>
+                      <Link
+                        href="/profile"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="block px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-salon-cream hover:text-salon-gold"
+                      >
+                        My Profile
+                      </Link>
                       <a
                         href="/logout"
-                        className="block px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-salon-cream hover:text-salon-gold"
+                        className="block border-t border-gray-100 px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-salon-cream hover:text-salon-gold"
                       >
                         Logout
                       </a>
@@ -125,6 +134,7 @@ export function Navbar() {
               ) : (
                 <Link
                   href="/login"
+                  data-tour="nav-account"
                   className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-salon-gold"
                 >
                   <UserIcon size={16} />
@@ -172,6 +182,13 @@ export function Navbar() {
                       {user.email}
                     </p>
                   </div>
+                  <Link
+                    href="/profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="mt-2 block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-salon-cream hover:text-salon-gold"
+                  >
+                    My Profile
+                  </Link>
                   <a
                     href="/logout"
                     className="mt-2 block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-salon-cream hover:text-salon-gold"
