@@ -30,28 +30,37 @@ const steps: Step[] = [
     content:
       "Take a quick look around, we'll show you where everything is in under a minute.",
     disableBeacon: true,
-    placement: "bottom",
+    placement: "bottom-start",
+    offset: 28,
   },
   {
     target: '[data-tour="nav-services"]',
     title: "Find your service",
     content: "Browse our full range of hair, skin and nail services here.",
+    placement: "bottom",
+    offset: 16,
   },
   {
     target: '[data-tour="nav-gallery"]',
     title: "Get inspired",
     content: "See real results from our stylists in the gallery.",
+    placement: "bottom",
+    offset: 16,
   },
   {
     target: '[data-tour="nav-book-now"]',
     title: "Reserve your spot",
     content: "When you're ready, book your appointment right from here.",
+    placement: "bottom-end",
+    offset: 16,
   },
   {
     target: '[data-tour="nav-account"]',
     title: "Make it yours",
     content:
       "Create a free account to book appointments and keep your profile up to date.",
+    placement: "bottom-end",
+    offset: 16,
   },
 ];
 
@@ -221,7 +230,8 @@ export function WelcomeTour() {
         tooltipComponent={TourTooltip}
         beaconComponent={TourBeacon}
         callback={handleCallback}
-        floaterProps={{ disableAnimation: true }}
+        floaterProps={{ disableAnimation: true, hideArrow: true }}
+        spotlightPadding={6}
         styles={{
           options: {
             arrowColor: "#ffffff",

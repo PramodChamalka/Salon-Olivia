@@ -334,8 +334,8 @@ function LoginForm() {
 
               {/* Guest */}
               <div className="text-center mt-5">
-                <button
-                  type="button"
+                <Link
+                  href="/"
                   className="
                     bg-transparent border-none text-[#B76E79]
                     text-sm font-medium cursor-pointer p-0
@@ -345,7 +345,7 @@ function LoginForm() {
                   "
                 >
                   Continue as Guest
-                </button>
+                </Link>
               </div>
 
               {/* Register link */}
