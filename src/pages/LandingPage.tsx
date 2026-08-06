@@ -46,7 +46,7 @@ export default function LandingPage() {
                 src="/images/oliv.jpeg"
                 alt="Salon Olivia interior"
                 className="h-[500px] w-full object-cover"
-                width={500}
+                width={650}
                 height={500}
               />
             </div>

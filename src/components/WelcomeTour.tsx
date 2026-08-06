@@ -31,14 +31,14 @@ const steps: Step[] = [
       "Take a quick look around, we'll show you where everything is in under a minute.",
     disableBeacon: true,
     placement: "bottom-start",
-    offset: 28,
+    offset: 12,
   },
   {
     target: '[data-tour="nav-services"]',
     title: "Find your service",
     content: "Browse our full range of hair, skin and nail services here.",
     placement: "bottom",
-    offset: 16,
+    offset: 10,
   },
   {
     target: '[data-tour="nav-gallery"]',
@@ -103,9 +103,7 @@ function TourTooltip({
             {step.title}
           </h3>
         )}
-        <p className="text-sm leading-relaxed text-gray-600">
-          {step.content}
-        </p>
+        <p className="text-sm leading-relaxed text-gray-600">{step.content}</p>
 
         <div className="mt-6 flex items-center justify-between">
           <div className="flex items-center gap-1.5">
@@ -161,8 +159,13 @@ function TourBeacon(props: BeaconRenderProps) {
   // react-joyride passes continuous/index/isLastStep/size/step (typed via
   // BeaconRenderProps) plus aria-label/onClick/onMouseEnter/ref/title at
   // runtime; only the latter belong on the DOM node.
-  const { "aria-label": ariaLabel, title, onClick, onMouseEnter, ref } =
-    props as unknown as BeaconDomProps;
+  const {
+    "aria-label": ariaLabel,
+    title,
+    onClick,
+    onMouseEnter,
+    ref,
+  } = props as unknown as BeaconDomProps;
 
   return (
     <span
@@ -205,28 +208,29 @@ export function WelcomeTour() {
   return (
     <>
       <style>{`
-        @keyframes tourTooltipIn {
-          from { opacity: 0; transform: translateY(8px) scale(0.96); }
-          to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .tour-tooltip {
-          animation: tourTooltipIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) both;
-        }
-        .react-joyride__overlay {
-          backdrop-filter: blur(1.5px);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .tour-tooltip { animation: none; }
-          .tour-beacon .animate-ping { animation: none; }
-        }
-      `}</style>
-      <Joyride
+  @keyframes tourTooltipIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+  .tour-tooltip {
+    animation: tourTooltipIn 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .react-joyride__overlay {
+    backdrop-filter: blur(1.5px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tour-tooltip { animation: none; }
+    .tour-beacon .animate-ping { animation: none; }
+  }
+`}</style>
+
+      {/* <Joyride
         steps={steps}
         run={run}
         continuous
         showSkipButton
-        scrollToFirstStep
-        disableScrollParentFix
+        scrollToFirstStep = {false}
+        disableScrollParentFix = {true}
         tooltipComponent={TourTooltip}
         beaconComponent={TourBeacon}
         callback={handleCallback}
@@ -240,6 +244,37 @@ export function WelcomeTour() {
             zIndex: 10000,
           },
           spotlight: { borderRadius: 12 },
+        }}
+      /> */}
+      <Joyride
+        steps={steps}
+        run={run}
+        continuous
+        showSkipButton
+        scrollToFirstStep={false}
+        disableScrolling={true}
+        disableScrollParentFix={true}
+        tooltipComponent={TourTooltip}
+        beaconComponent={TourBeacon}
+        callback={handleCallback}
+        floaterProps={{
+          disableAnimation: true,
+          hideArrow: true,
+          options: {
+            preventOverflow: {
+              boundariesElement: "window",
+            },
+          },
+        }}
+        spotlightPadding={6}
+        styles={{
+          options: {
+            arrowColor: "#ffffff",
+            overlayColor: "rgba(51, 51, 51, 0.6)",
+            spotlightShadow: "0 0 0 4px rgba(212, 175, 55, 0.5)",
+            zIndex: 10000,
+          },
+          spotlight: { borderRadius: 8 },
         }}
       />
     </>
