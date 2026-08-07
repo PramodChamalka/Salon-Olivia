@@ -1,8 +1,15 @@
 import { PageShell } from "../../components/PageShell";
 import { AppointmentForm } from "../../components/AppointmentForm";
 import { CalendarDays, Clock3, Sparkles } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
-export default function AppointmentPage() {
+export default async function AppointmentPage() {
+  const supabase = await createClient();
+  const { data: services } = await supabase
+    .from("services")
+    .select("service_id, service_name")
+    .order("service_name");
+
   return (
     <PageShell>
       <section className="bg-salon-cream/30 py-20">
@@ -60,7 +67,7 @@ export default function AppointmentPage() {
                 </div>
               </div>
             </div>
-            <AppointmentForm />
+            <AppointmentForm services={services ?? []} />
           </div>
         </div>
       </section>
