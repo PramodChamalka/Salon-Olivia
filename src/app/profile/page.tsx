@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { PageShell } from "@/components/PageShell";
 import { ProfileForm } from "@/components/ProfileForm";
+import { MyAppointments } from "@/components/MyAppointments";
 
 export default async function ProfilePage() {
   const supabase = await createClient();
@@ -18,6 +19,30 @@ export default async function ProfilePage() {
     .select("first_name, last_name, phone, birthday, address, avatar_url, role, created_at")
     .eq("id", user.id)
     .single();
+
+  const { data: appointments } = await supabase
+    .from("appointments")
+    .select("id, preferred_time, status, notes, services(service_name)")
+    .eq("customer_id", user.id)
+    .order("preferred_time", { ascending: false });
+
+  type AppointmentRow = {
+    id: string;
+    preferred_time: string;
+    status: "pending" | "confirmed" | "completed" | "cancelled";
+    notes: string | null;
+    services: { service_name: string } | null;
+  };
+
+  const myAppointments = (
+    (appointments ?? []) as unknown as AppointmentRow[]
+  ).map((appt) => ({
+    id: appt.id,
+    preferred_time: appt.preferred_time,
+    status: appt.status,
+    notes: appt.notes,
+    service_name: appt.services?.service_name ?? null,
+  }));
 
   return (
     <PageShell>
@@ -41,6 +66,8 @@ export default async function ProfilePage() {
             role={profile?.role ?? "customer"}
             memberSince={profile?.created_at ?? null}
           />
+
+          <MyAppointments appointments={myAppointments} />
         </div>
       </section>
     </PageShell>
