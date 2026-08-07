@@ -8,18 +8,15 @@ import {
   Scissors,
   Images,
   Users,
-  Award,
-  Settings,
   LogOut,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
-  { label: "Bookings", href: "#", icon: Calendar },
+  { label: "Bookings", href: "/admin/bookings", icon: Calendar },
   { label: "Services", href: "/admin/services", icon: Scissors },
   { label: "Gallery", href: "/admin/gallery", icon: Images },
   { label: "Customers", href: "/admin/customers", icon: Users },
-  { label: "Staff", href: "#", icon: Award },
 ];
 
 export function AdminSidebar() {
@@ -54,12 +51,6 @@ export function AdminSidebar() {
       </nav>
 
       <div className="p-4 border-t border-gray-800 space-y-2">
-        <a
-          href="#"
-          className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
-        >
-          <Settings size={20} className="mr-3" /> Settings
-        </a>
         <Link
           href="/"
           className="flex items-center px-4 py-3 text-red-400 hover:bg-gray-800 hover:text-red-300 rounded-lg transition-colors"
