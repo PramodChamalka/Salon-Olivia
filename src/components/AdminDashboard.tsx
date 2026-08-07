@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard,
   Calendar,
@@ -48,15 +48,52 @@ const STATUS_STYLES: Record<AppointmentStatus, string> = {
   cancelled: "bg-gray-100 text-gray-500",
 };
 
+const STATUS_OPTIONS: AppointmentStatus[] = [
+  "pending",
+  "confirmed",
+  "completed",
+  "cancelled",
+];
+
 export function AdminDashboard() {
+  const supabase = useMemo(() => createClient(), []);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loadStatus, setLoadStatus] = useState<"loading" | "error" | "ready">(
     "loading"
   );
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  const handleStatusChange = async (
+    id: string,
+    nextStatus: AppointmentStatus
+  ) => {
+    const previous = appointments;
+    setUpdatingId(id);
+    setAppointments((rows) =>
+      rows.map((row) => (row.id === id ? { ...row, status: nextStatus } : row))
+    );
+
+    const { error } = await supabase
+      .from("appointments")
+      .update({ status: nextStatus })
+      .eq("id", id);
+
+    if (error) {
+      setAppointments(previous);
+    } else if (nextStatus === "confirmed" || nextStatus === "cancelled") {
+      // Best-effort: the status change already succeeded above regardless
+      // of whether the email goes out.
+      fetch("/api/appointments/notify-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ appointmentId: id, status: nextStatus }),
+      }).catch(() => {});
+    }
+    setUpdatingId(null);
+  };
 
   useEffect(() => {
     let cancelled = false;
-    const supabase = createClient();
 
     supabase
       .from("appointments")
@@ -77,7 +114,7 @@ export function AdminDashboard() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [supabase]);
 
   const bookingData = [
     {
@@ -484,11 +521,23 @@ export function AdminDashboard() {
                           )}
                         </td>
                         <td className="p-4">
-                          <span
-                            className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${STATUS_STYLES[booking.status]}`}
+                          <select
+                            value={booking.status}
+                            disabled={updatingId === booking.id}
+                            onChange={(e) =>
+                              handleStatusChange(
+                                booking.id,
+                                e.target.value as AppointmentStatus
+                              )
+                            }
+                            className={`rounded-full border-0 px-3 py-1 text-xs font-medium capitalize cursor-pointer disabled:cursor-wait disabled:opacity-60 ${STATUS_STYLES[booking.status]}`}
                           >
-                            {booking.status}
-                          </span>
+                            {STATUS_OPTIONS.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
                         </td>
                         <td className="p-4 max-w-xs truncate text-sm text-gray-600">
                           {booking.notes || "—"}
