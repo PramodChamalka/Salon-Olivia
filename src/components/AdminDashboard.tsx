@@ -2,17 +2,11 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  LayoutDashboard,
   Calendar,
-  Scissors,
-  Users,
-  Settings,
-  LogOut,
   TrendingUp,
   Users as UsersIcon,
   DollarSign,
   Award,
-  Bell,
 } from "lucide-react";
 import {
   LineChart,
@@ -171,96 +165,13 @@ export function AdminDashboard() {
   ];
 
   return (
-    <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
-      {/* Sidebar */}
-      <aside className="w-64 bg-salon-dark text-white flex flex-col hidden md:flex">
-        <div className="p-6 border-b border-gray-800">
-          <span className="font-serif text-2xl font-bold text-salon-gold">
-            Salon Olivia
-          </span>
-          <p className="text-xs text-gray-400 mt-1">Admin Portal</p>
-        </div>
+    <>
+      <h1 className="mb-6 font-serif text-xl font-bold text-salon-dark">
+        Dashboard Overview
+      </h1>
 
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          <a
-            href="#"
-            className="flex items-center px-4 py-3 bg-salon-gold/20 text-salon-gold rounded-lg font-medium"
-          >
-            <LayoutDashboard size={20} className="mr-3" /> Overview
-          </a>
-          <a
-            href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
-          >
-            <Calendar size={20} className="mr-3" /> Bookings
-          </a>
-          <a
-            href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
-          >
-            <Scissors size={20} className="mr-3" /> Services
-          </a>
-          <a
-            href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
-          >
-            <Users size={20} className="mr-3" /> Customers
-          </a>
-          <a
-            href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
-          >
-            <Award size={20} className="mr-3" /> Staff
-          </a>
-        </nav>
-
-        <div className="p-4 border-t border-gray-800 space-y-2">
-          <a
-            href="#"
-            className="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
-          >
-            <Settings size={20} className="mr-3" /> Settings
-          </a>
-          <a
-            href="/"
-            className="flex items-center px-4 py-3 text-red-400 hover:bg-gray-800 hover:text-red-300 rounded-lg transition-colors"
-          >
-            <LogOut size={20} className="mr-3" /> Back to Site
-          </a>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        {/* Top Header */}
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 shrink-0">
-          <h1 className="font-serif text-xl font-bold text-salon-dark">
-            Dashboard Overview
-          </h1>
-
-          <div className="flex items-center space-x-4">
-            <button className="relative p-2 text-gray-400 hover:text-salon-dark transition-colors">
-              <Bell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-            <div className="flex items-center space-x-3 border-l border-gray-200 pl-4">
-              <img
-                src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?ixlib=rb-4.0.3&w=100&q=80"
-                alt="Admin"
-                className="w-8 h-8 rounded-full object-cover"
-              />
-
-              <span className="text-sm font-medium text-gray-700 hidden sm:block">
-                Ms. Nadeeka
-              </span>
-            </div>
-          </div>
-        </header>
-
-        {/* Dashboard Content */}
-        <div className="flex-1 overflow-y-auto p-8">
-          {/* Stat Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center">
               <div className="bg-blue-50 p-4 rounded-xl text-blue-600 mr-4">
                 <Calendar size={24} />
@@ -548,8 +459,6 @@ export function AdminDashboard() {
               </table>
             </div>
           </div>
-        </div>
-      </main>
-    </div>
+    </>
   );
 }
