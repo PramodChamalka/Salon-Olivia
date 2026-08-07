@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import supabase
 
 from app.api.chat import router
+from app.api.gallery import router as gallery_router
 
 app = FastAPI(
     title="Salon Olivia AI"
@@ -22,3 +23,4 @@ def test_db():
     return data.data
 
 app.include_router(router)
+app.include_router(gallery_router)

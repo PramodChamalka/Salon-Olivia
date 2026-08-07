@@ -1,18 +1,26 @@
 "use client";
 import Link from "next/link";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { useActionState } from "react";
 import { useSearchParams } from "next/navigation";
 import { loginAction, type AuthState } from "@/app/auth/actions";
+import { signInWithGoogle } from "@/lib/supabase/oauth";
 
 function LoginForm() {
   const [state, formAction, isPending] = useActionState<AuthState, FormData>(
     loginAction,
     {}
   );
+  const [googlePending, setGooglePending] = useState(false);
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get("redirect") ?? "";
   const justRegistered = searchParams?.get("registered") === "1";
+  const oauthError = searchParams?.get("error") ?? "";
+
+  const handleGoogleSignIn = async () => {
+    setGooglePending(true);
+    await signInWithGoogle(redirectTo);
+  };
   return (
     <>
       <style>{`
@@ -166,6 +174,11 @@ function LoginForm() {
                     {state.error}
                   </div>
                 )}
+                {oauthError && (
+                  <div role="alert" className="mb-5 rounded-[10px] border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {oauthError}
+                  </div>
+                )}
                 {/* Email */}
                 <div className="mb-5">
                   <label
@@ -276,6 +289,8 @@ function LoginForm() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={googlePending}
                   className="
                     flex items-center justify-center gap-2.5
                     flex-1 h-[46px] px-4
@@ -287,6 +302,7 @@ function LoginForm() {
                     hover:border-[#B76E79] hover:bg-[#F8D7DA] hover:shadow-[0_2px_8px_rgba(183,110,121,0.1)]
                     active:scale-[0.98]
                     focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B76E79]
+                    disabled:opacity-60 disabled:cursor-not-allowed
                   "
                   aria-label="Continue with Google"
                 >
@@ -312,43 +328,14 @@ function LoginForm() {
                       fill="#EA4335"
                     />
                   </svg>
-                  Google
-                </button>
-
-                <button
-                  type="button"
-                  className="
-                    flex items-center justify-center gap-2.5
-                    flex-1 h-[46px] px-4
-                    bg-white text-[#333333]
-                    border border-[#CCCCCC] rounded-[10px]
-                    font-['Poppins',Arial,sans-serif] text-sm font-medium
-                    cursor-pointer
-                    transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]
-                    hover:border-[#B76E79] hover:bg-[#F8D7DA] hover:shadow-[0_2px_8px_rgba(183,110,121,0.1)]
-                    active:scale-[0.98]
-                    focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B76E79]
-                  "
-                  aria-label="Continue with Facebook"
-                >
-                  <svg
-                    className="w-5 h-5 shrink-0"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-                      fill="#1877F2"
-                    />
-                  </svg>
-                  Facebook
+                  {googlePending ? "Redirecting…" : "Continue with Google"}
                 </button>
               </div>
 
               {/* Guest */}
               <div className="text-center mt-5">
-                <button
-                  type="button"
+                <Link
+                  href="/"
                   className="
                     bg-transparent border-none text-[#B76E79]
                     text-sm font-medium cursor-pointer p-0
@@ -358,7 +345,7 @@ function LoginForm() {
                   "
                 >
                   Continue as Guest
-                </button>
+                </Link>
               </div>
 
               {/* Register link */}

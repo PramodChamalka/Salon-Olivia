@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
-const PROTECTED = ['/appointment']
+const PROTECTED = ['/appointment', '/profile']
 const ADMIN_ONLY = ['/admin']
 
 export async function middleware(request: NextRequest) {
@@ -42,14 +42,24 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (ADMIN_ONLY.some((p) => path.startsWith(p))) {
+  if (needsAuth && user) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('role, is_active')
-      .eq('id', user!.id)
+      .eq('id', user.id)
       .single()
 
-    if (profile?.role !== 'admin' || profile?.is_active === false) {
+    if (profile?.is_active === false) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/unauthorized'
+      url.searchParams.set('reason', 'inactive')
+      return NextResponse.redirect(url)
+    }
+
+    if (
+      ADMIN_ONLY.some((p) => path.startsWith(p)) &&
+      profile?.role !== 'admin'
+    ) {
       const url = request.nextUrl.clone()
       url.pathname = '/unauthorized'
       return NextResponse.redirect(url)

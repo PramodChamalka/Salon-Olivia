@@ -1,7 +1,15 @@
 import { PageShell } from "../../components/PageShell";
-import { CalendarDays, Clock3, Sparkles, UserRound } from "lucide-react";
+import { AppointmentForm } from "../../components/AppointmentForm";
+import { CalendarDays, Clock3, Sparkles } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
-export default function AppointmentPage() {
+export default async function AppointmentPage() {
+  const supabase = await createClient();
+  const { data: services } = await supabase
+    .from("services")
+    .select("service_id, service_name")
+    .order("service_name");
+
   return (
     <PageShell>
       <section className="bg-salon-cream/30 py-20">
@@ -59,91 +67,7 @@ export default function AppointmentPage() {
                 </div>
               </div>
             </div>
-            <div className="rounded-3xl border border-gray-100 bg-white p-8 shadow-sm">
-              <div className="mb-6 flex items-center">
-                <div className="mr-3 rounded-full bg-salon-cream p-3 text-salon-gold">
-                  <UserRound size={20} />
-                </div>
-                <div>
-                  <h2 className="font-serif text-2xl font-semibold text-salon-dark">
-                    Appointment Request
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    Tell us what you are looking for and we’ll be in touch
-                    shortly.
-                  </p>
-                </div>
-              </div>
-              <form className="space-y-5">
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Full Name
-                    </label>
-                    <input
-                      className="w-full rounded-lg border border-gray-200 p-3 focus:border-salon-gold focus:outline-none"
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Phone
-                    </label>
-                    <input
-                      className="w-full rounded-lg border border-gray-200 p-3 focus:border-salon-gold focus:outline-none"
-                      placeholder="+94 77 123 4567"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Preferred Service
-                  </label>
-                  <select className="w-full rounded-lg border border-gray-200 p-3 focus:border-salon-gold focus:outline-none">
-                    <option>Signature Haircut & Styling</option>
-                    <option>Reborn Color Treatment</option>
-                    <option>Radiance Facial</option>
-                    <option>Luxury Gel Manicure</option>
-                  </select>
-                </div>
-                <div className="grid gap-5 md:grid-cols-2">
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Preferred Date
-                    </label>
-                    <input
-                      type="date"
-                      className="w-full rounded-lg border border-gray-200 p-3 focus:border-salon-gold focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Preferred Time
-                    </label>
-                    <input
-                      type="time"
-                      className="w-full rounded-lg border border-gray-200 p-3 focus:border-salon-gold focus:outline-none"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">
-                    Notes
-                  </label>
-                  <textarea
-                    rows={4}
-                    className="w-full rounded-lg border border-gray-200 p-3 focus:border-salon-gold focus:outline-none"
-                    placeholder="Tell us about your vision or special occasion."
-                  />
-                </div>
-                <button
-                  type="button"
-                  className="w-full rounded-full bg-salon-dark px-6 py-3 font-medium text-white transition-colors hover:bg-black"
-                >
-                  Submit Request
-                </button>
-              </form>
-            </div>
+            <AppointmentForm services={services ?? []} />
           </div>
         </div>
       </section>
