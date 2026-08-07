@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Calendar,
@@ -22,7 +25,47 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import { createClient } from "@/lib/supabase/client";
+
+type Appointment = {
+  id: string;
+  full_name: string;
+  phone: string;
+  preferred_date: string;
+  preferred_time: string;
+  notes: string | null;
+  created_at: string;
+};
+
 export function AdminDashboard() {
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [status, setStatus] = useState<"loading" | "error" | "ready">(
+    "loading"
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+    const supabase = createClient();
+
+    supabase
+      .from("appointments")
+      .select("id, full_name, phone, preferred_date, preferred_time, notes, created_at")
+      .order("created_at", { ascending: false })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) {
+          setStatus("error");
+          return;
+        }
+        setAppointments(data ?? []);
+        setStatus("ready");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const bookingData = [
     {
       name: "Mon",
@@ -77,56 +120,6 @@ export function AdminDashboard() {
     },
   ];
 
-  const recentBookings = [
-    {
-      id: "#B-1042",
-      client: "Amali Perera",
-      service: "Reborn Color",
-      date: "Today, 10:00 AM",
-      status: "Completed",
-    },
-    {
-      id: "#B-1043",
-      client: "Sarah Jenkins",
-      service: "Signature Haircut",
-      date: "Today, 11:30 AM",
-      status: "In Progress",
-    },
-    {
-      id: "#B-1044",
-      client: "Nimali Silva",
-      service: "Radiance Facial",
-      date: "Today, 02:00 PM",
-      status: "Upcoming",
-    },
-    {
-      id: "#B-1045",
-      client: "Jessica Wong",
-      service: "Luxury Gel Mani",
-      date: "Tomorrow, 09:00 AM",
-      status: "Upcoming",
-    },
-    {
-      id: "#B-1046",
-      client: "Tanya Fernando",
-      service: "Bridal Trial",
-      date: "Tomorrow, 01:00 PM",
-      status: "Upcoming",
-    },
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Completed":
-        return "bg-green-100 text-green-800";
-      case "In Progress":
-        return "bg-blue-100 text-blue-800";
-      case "Upcoming":
-        return "bg-yellow-100 text-yellow-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">
       {/* Sidebar */}
@@ -226,10 +219,10 @@ export function AdminDashboard() {
                 <p className="text-sm text-gray-500 font-medium">
                   Total Bookings
                 </p>
-                <h3 className="text-2xl font-bold text-gray-900">184</h3>
-                <p className="text-xs text-green-600 flex items-center mt-1">
-                  <TrendingUp size={12} className="mr-1" /> +12% this week
-                </p>
+                <h3 className="text-2xl font-bold text-gray-900">
+                  {status === "ready" ? appointments.length : "—"}
+                </h3>
+                <p className="text-xs text-gray-400 mt-1">All time</p>
               </div>
             </div>
 
@@ -410,58 +403,73 @@ export function AdminDashboard() {
 
           {/* Recent Bookings Table */}
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden mb-8">
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+            <div className="p-6 border-b border-gray-100">
               <h3 className="font-serif text-lg font-bold text-salon-dark">
                 Recent Bookings
               </h3>
-              <button className="text-sm text-salon-gold font-medium hover:text-yellow-600">
-                View All
-              </button>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
-                    <th className="p-4 font-medium">Booking ID</th>
                     <th className="p-4 font-medium">Client Name</th>
-                    <th className="p-4 font-medium">Service</th>
-                    <th className="p-4 font-medium">Date & Time</th>
-                    <th className="p-4 font-medium">Status</th>
-                    <th className="p-4 font-medium">Action</th>
+                    <th className="p-4 font-medium">Phone</th>
+                    <th className="p-4 font-medium">Preferred Date & Time</th>
+                    <th className="p-4 font-medium">Notes</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {recentBookings.map((booking, idx) => (
-                    <tr
-                      key={idx}
-                      className="hover:bg-gray-50 transition-colors"
-                    >
-                      <td className="p-4 text-sm font-medium text-gray-900">
-                        {booking.id}
-                      </td>
-                      <td className="p-4 text-sm text-gray-700">
-                        {booking.client}
-                      </td>
-                      <td className="p-4 text-sm text-gray-600">
-                        {booking.service}
-                      </td>
-                      <td className="p-4 text-sm text-gray-600">
-                        {booking.date}
-                      </td>
-                      <td className="p-4">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(booking.status)}`}
-                        >
-                          {booking.status}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <button className="text-gray-400 hover:text-salon-dark">
-                          <Settings size={16} />
-                        </button>
+                  {status === "loading" &&
+                    Array.from({ length: 4 }).map((_, idx) => (
+                      <tr key={idx}>
+                        <td className="p-4" colSpan={4}>
+                          <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
+                        </td>
+                      </tr>
+                    ))}
+
+                  {status === "error" && (
+                    <tr>
+                      <td className="p-4 text-sm text-red-600" colSpan={4}>
+                        Couldn&apos;t load bookings right now. Please refresh.
                       </td>
                     </tr>
-                  ))}
+                  )}
+
+                  {status === "ready" && appointments.length === 0 && (
+                    <tr>
+                      <td className="p-4 text-sm text-gray-500" colSpan={4}>
+                        No appointments yet.
+                      </td>
+                    </tr>
+                  )}
+
+                  {status === "ready" &&
+                    appointments.map((booking) => (
+                      <tr
+                        key={booking.id}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="p-4 text-sm font-medium text-gray-900">
+                          {booking.full_name}
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {booking.phone}
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
+                          {new Date(booking.preferred_time).toLocaleString(
+                            undefined,
+                            {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            }
+                          )}
+                        </td>
+                        <td className="p-4 max-w-xs truncate text-sm text-gray-600">
+                          {booking.notes || "—"}
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
