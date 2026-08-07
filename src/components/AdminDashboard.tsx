@@ -27,6 +27,8 @@ import {
 } from "recharts";
 import { createClient } from "@/lib/supabase/client";
 
+type AppointmentStatus = "pending" | "confirmed" | "completed" | "cancelled";
+
 type Appointment = {
   id: string;
   full_name: string;
@@ -34,12 +36,21 @@ type Appointment = {
   preferred_date: string;
   preferred_time: string;
   notes: string | null;
+  status: AppointmentStatus;
   created_at: string;
+  services: { service_name: string } | null;
+};
+
+const STATUS_STYLES: Record<AppointmentStatus, string> = {
+  pending: "bg-yellow-100 text-yellow-800",
+  confirmed: "bg-blue-100 text-blue-800",
+  completed: "bg-green-100 text-green-800",
+  cancelled: "bg-gray-100 text-gray-500",
 };
 
 export function AdminDashboard() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [status, setStatus] = useState<"loading" | "error" | "ready">(
+  const [loadStatus, setLoadStatus] = useState<"loading" | "error" | "ready">(
     "loading"
   );
 
@@ -49,16 +60,18 @@ export function AdminDashboard() {
 
     supabase
       .from("appointments")
-      .select("id, full_name, phone, preferred_date, preferred_time, notes, created_at")
+      .select(
+        "id, full_name, phone, preferred_date, preferred_time, notes, status, created_at, services(service_name)"
+      )
       .order("created_at", { ascending: false })
       .then(({ data, error }) => {
         if (cancelled) return;
         if (error) {
-          setStatus("error");
+          setLoadStatus("error");
           return;
         }
-        setAppointments(data ?? []);
-        setStatus("ready");
+        setAppointments((data as unknown as Appointment[]) ?? []);
+        setLoadStatus("ready");
       });
 
     return () => {
@@ -220,7 +233,7 @@ export function AdminDashboard() {
                   Total Bookings
                 </p>
                 <h3 className="text-2xl font-bold text-gray-900">
-                  {status === "ready" ? appointments.length : "—"}
+                  {loadStatus === "ready" ? appointments.length : "—"}
                 </h3>
                 <p className="text-xs text-gray-400 mt-1">All time</p>
               </div>
@@ -414,37 +427,39 @@ export function AdminDashboard() {
                   <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                     <th className="p-4 font-medium">Client Name</th>
                     <th className="p-4 font-medium">Phone</th>
+                    <th className="p-4 font-medium">Service</th>
                     <th className="p-4 font-medium">Preferred Date & Time</th>
+                    <th className="p-4 font-medium">Status</th>
                     <th className="p-4 font-medium">Notes</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {status === "loading" &&
+                  {loadStatus === "loading" &&
                     Array.from({ length: 4 }).map((_, idx) => (
                       <tr key={idx}>
-                        <td className="p-4" colSpan={4}>
+                        <td className="p-4" colSpan={6}>
                           <div className="h-4 w-full animate-pulse rounded bg-gray-100" />
                         </td>
                       </tr>
                     ))}
 
-                  {status === "error" && (
+                  {loadStatus === "error" && (
                     <tr>
-                      <td className="p-4 text-sm text-red-600" colSpan={4}>
+                      <td className="p-4 text-sm text-red-600" colSpan={6}>
                         Couldn&apos;t load bookings right now. Please refresh.
                       </td>
                     </tr>
                   )}
 
-                  {status === "ready" && appointments.length === 0 && (
+                  {loadStatus === "ready" && appointments.length === 0 && (
                     <tr>
-                      <td className="p-4 text-sm text-gray-500" colSpan={4}>
+                      <td className="p-4 text-sm text-gray-500" colSpan={6}>
                         No appointments yet.
                       </td>
                     </tr>
                   )}
 
-                  {status === "ready" &&
+                  {loadStatus === "ready" &&
                     appointments.map((booking) => (
                       <tr
                         key={booking.id}
@@ -457,6 +472,9 @@ export function AdminDashboard() {
                           {booking.phone}
                         </td>
                         <td className="p-4 text-sm text-gray-600">
+                          {booking.services?.service_name ?? "—"}
+                        </td>
+                        <td className="p-4 text-sm text-gray-600">
                           {new Date(booking.preferred_time).toLocaleString(
                             undefined,
                             {
@@ -464,6 +482,13 @@ export function AdminDashboard() {
                               timeStyle: "short",
                             }
                           )}
+                        </td>
+                        <td className="p-4">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${STATUS_STYLES[booking.status]}`}
+                          >
+                            {booking.status}
+                          </span>
                         </td>
                         <td className="p-4 max-w-xs truncate text-sm text-gray-600">
                           {booking.notes || "—"}

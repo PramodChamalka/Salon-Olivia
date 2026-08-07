@@ -7,7 +7,16 @@ import {
   type AppointmentState,
 } from "@/app/appointment/actions";
 
-export function AppointmentForm() {
+type Service = {
+  service_id: string;
+  service_name: string;
+};
+
+type AppointmentFormProps = {
+  services: Service[];
+};
+
+export function AppointmentForm({ services }: AppointmentFormProps) {
   const [state, formAction, isPending] = useActionState<
     AppointmentState,
     FormData
@@ -82,13 +91,19 @@ export function AppointmentForm() {
             Preferred Service
           </label>
           <select
-            name="service"
+            name="serviceId"
+            required
+            defaultValue=""
             className="w-full rounded-lg border border-gray-200 p-3 focus:border-salon-gold focus:outline-none"
           >
-            <option>Signature Haircut & Styling</option>
-            <option>Reborn Color Treatment</option>
-            <option>Radiance Facial</option>
-            <option>Luxury Gel Manicure</option>
+            <option value="" disabled>
+              {services.length ? "Select a service" : "No services available"}
+            </option>
+            {services.map((service) => (
+              <option key={service.service_id} value={service.service_id}>
+                {service.service_name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="grid gap-5 md:grid-cols-2">

@@ -20,30 +20,26 @@ export async function createAppointmentAction(
 
   const fullName = String(formData.get('fullName') ?? '').trim()
   const phone = String(formData.get('phone') ?? '').trim()
-  const service = String(formData.get('service') ?? '').trim()
+  const serviceId = String(formData.get('serviceId') ?? '').trim()
   const preferredDate = String(formData.get('preferredDate') ?? '')
   const preferredTimeOfDay = String(formData.get('preferredTime') ?? '')
   const notes = String(formData.get('notes') ?? '').trim()
 
-  if (!fullName || !phone || !preferredDate || !preferredTimeOfDay) {
+  if (!fullName || !phone || !serviceId || !preferredDate || !preferredTimeOfDay) {
     return {
-      error: 'Please fill in your name, phone, preferred date, and time.',
+      error:
+        'Please fill in your name, phone, preferred service, date, and time.',
     }
   }
-
-  // appointments has no service/service_id column yet, so the chosen
-  // service rides along in notes rather than being silently dropped.
-  const combinedNotes = service
-    ? `Requested service: ${service}${notes ? `\n\n${notes}` : ''}`
-    : notes || null
 
   const { error } = await supabase.from('appointments').insert({
     customer_id: user.id,
     full_name: fullName,
     phone,
+    service_id: serviceId,
     preferred_date: preferredDate,
     preferred_time: `${preferredDate}T${preferredTimeOfDay}:00`,
-    notes: combinedNotes,
+    notes: notes || null,
   })
 
   if (error) {
