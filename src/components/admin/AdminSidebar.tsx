@@ -18,7 +18,7 @@ const NAV_ITEMS = [
   { label: "Bookings", href: "#", icon: Calendar },
   { label: "Services", href: "/admin/services", icon: Scissors },
   { label: "Gallery", href: "/admin/gallery", icon: Images },
-  { label: "Customers", href: "#", icon: Users },
+  { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Staff", href: "#", icon: Award },
 ];
 
