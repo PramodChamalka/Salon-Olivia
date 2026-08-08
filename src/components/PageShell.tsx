@@ -26,7 +26,7 @@ export function PageShell({ children, hideFloatingChat = false }: PageShellProps
         <AIAdvisor isOpen={chatOpen} setIsOpen={setChatOpen} />
       )}
       <Link
-        href="https://wa.me/94771234567"
+        href="https://wa.me/94773091720"
         target="_blank"
         rel="noreferrer"
         aria-hidden={chatOpen}
