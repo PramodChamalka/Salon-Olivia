@@ -1,7 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import { useActionState } from "react";
+import {
+  subscribeAction,
+  type NewsletterState,
+} from "@/app/actions/newsletter";
 
 export function Footer() {
+  const [state, formAction] = useActionState<NewsletterState, FormData>(
+    subscribeAction,
+    {}
+  );
+
   const quickLinks = [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
@@ -98,19 +110,28 @@ export function Footer() {
             <p className="mb-4 text-sm text-gray-400">
               Subscribe to receive updates, access to exclusive deals, and more.
             </p>
-            <form className="flex flex-col space-y-3">
+            <form action={formAction} className="flex flex-col space-y-3">
               <input
                 type="email"
+                name="email"
                 placeholder="Enter your email address"
                 className="rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-sm text-white focus:border-salon-gold focus:outline-none"
               />
               <button
-                type="button"
+                type="submit"
                 className="rounded-lg bg-salon-gold px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-yellow-600"
               >
                 Subscribe
               </button>
             </form>
+            {state.success && (
+              <p className="mt-2 text-xs text-green-400">
+                Thanks for subscribing!
+              </p>
+            )}
+            {state.error && (
+              <p className="mt-2 text-xs text-red-400">{state.error}</p>
+            )}
           </div>
         </div>
 
