@@ -35,9 +35,13 @@ export default function ContactPage() {
                 <div>
                   <h2 className="font-semibold text-salon-dark">Call Us</h2>
                   <p className="text-sm text-gray-600">
-                    +94 11 234 5678
+                    <a href="tel:+94773091720" className="hover:text-salon-gold">
+                      +94 77 309 1720
+                    </a>
                     <br />
-                    +94 77 987 6543
+                    <a href="tel:+94776261549" className="hover:text-salon-gold">
+                      +94 77 626 1549
+                    </a>
                   </p>
                 </div>
               </div>

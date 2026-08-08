@@ -72,7 +72,7 @@ Walk-ins are accepted based on appointment availability.
 
 Phone:
 
-+94 77 987 6543
++94 77 309 1720 (WhatsApp) / +94 77 626 1549
 
 Email:
 
