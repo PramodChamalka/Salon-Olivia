@@ -163,7 +163,7 @@ export function CustomersTable({
                   </button>
                 </td>
                 <td className="p-4 text-sm text-gray-600">
-                  {new Date(customer.created_at).toLocaleDateString()}
+                  {new Date(customer.created_at).toLocaleDateString("en-US")}
                 </td>
               </tr>
             );

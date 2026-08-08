@@ -68,7 +68,12 @@ export function ProfileForm({
         {memberSince && (
           <p className="mt-2 flex items-center justify-center gap-1.5 text-xs text-gray-500">
             <CalendarClock size={14} />
-            Member since {new Date(memberSince).toLocaleDateString()}
+            Member since{" "}
+            {new Date(memberSince).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
           </p>
         )}
       </div>

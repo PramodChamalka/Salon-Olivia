@@ -61,7 +61,7 @@ export function MyAppointments({ appointments }: MyAppointmentsProps) {
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-gray-600">
-                  {new Date(appt.preferred_time).toLocaleString(undefined, {
+                  {new Date(appt.preferred_time).toLocaleString("en-US", {
                     dateStyle: "medium",
                     timeStyle: "short",
                   })}
