@@ -1,17 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         salon: {
-          dark: "#B76E79",
-          gold: "#D4AF37",
-          cream: "#FFFDF9",
-          section: "#F8D7DA",
-          card: "#F8D7DA",
-          overlay: "#F8D7DA",
-          rose: "#B76E79",
+          dark: "rgb(var(--salon-primary) / <alpha-value>)",
+          rose: "rgb(var(--salon-primary) / <alpha-value>)",
+          gold: "rgb(var(--salon-gold) / <alpha-value>)",
+          cream: "rgb(var(--salon-cream) / <alpha-value>)",
+          section: "rgb(var(--salon-section) / <alpha-value>)",
+          card: "rgb(var(--salon-card) / <alpha-value>)",
+          overlay: "rgb(var(--salon-overlay) / <alpha-value>)",
         },
       },
       fontFamily: {

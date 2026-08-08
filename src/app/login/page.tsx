@@ -12,6 +12,7 @@ function LoginForm() {
     {}
   );
   const [googlePending, setGooglePending] = useState(false);
+  const [clientErrors, setClientErrors] = useState<Record<string, string>>({});
   const searchParams = useSearchParams();
   const redirectTo = searchParams?.get("redirect") ?? "";
   const justRegistered = searchParams?.get("registered") === "1";
@@ -20,6 +21,24 @@ function LoginForm() {
   const handleGoogleSignIn = async () => {
     setGooglePending(true);
     await signInWithGoogle(redirectTo);
+  };
+
+  function validateLogin(formData: FormData): Record<string, string> {
+    const errors: Record<string, string> = {};
+    const email = String(formData.get("email") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+    if (!email) errors.email = "Email is required.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      errors.email = "Please enter a valid email address.";
+    if (!password) errors.password = "Password is required.";
+    return errors;
+  }
+
+  const handleSubmit = (formData: FormData) => {
+    const errors = validateLogin(formData);
+    setClientErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+    formAction(formData);
   };
   return (
     <>
@@ -160,7 +179,7 @@ function LoginForm() {
                 Sign in to your account to continue
               </p>
 
-              <form action={formAction} noValidate>
+              <form action={handleSubmit} noValidate>
                 <input type="hidden" name="redirect" value={redirectTo} />
 
                 {justRegistered && (
@@ -206,6 +225,11 @@ function LoginForm() {
                     autoComplete="email"
                     required
                   />
+                  {clientErrors.email && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Password */}
@@ -235,6 +259,11 @@ function LoginForm() {
                     autoComplete="current-password"
                     required
                   />
+                  {clientErrors.password && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.password}
+                    </p>
+                  )}
                 </div>
 
                 {/* Forgot Password */}

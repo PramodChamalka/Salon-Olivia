@@ -119,6 +119,24 @@ export default function ContactPage() {
               </form>
             </div>
           </div>
+
+          <div className="mt-12">
+            <h2 className="mb-4 text-center font-serif text-2xl font-bold text-salon-dark">
+              Find Us
+            </h2>
+            <div className="overflow-hidden rounded-3xl border border-gray-200 dark:border-gray-700 shadow-sm">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.301610726496!2d80.5695018!3d7.757801900000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3afcb36c054a6887%3A0x56765b443de9e10d!2sSalon%20Olivia!5e0!3m2!1sen!2slk!4v1786171380994!5m2!1sen!2slk"
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="Salon Olivia location on Google Maps"
+              />
+            </div>
+          </div>
         </div>
       </section>
     </PageShell>

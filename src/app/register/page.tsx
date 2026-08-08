@@ -10,10 +10,81 @@ export default function Register() {
     {}
   );
   const [googlePending, setGooglePending] = useState(false);
+  const [clientErrors, setClientErrors] = useState<Record<string, string>>({});
+  const [phone, setPhone] = useState("");
 
   const handleGoogleSignIn = async () => {
     setGooglePending(true);
     await signInWithGoogle("");
+  };
+
+  function validateRegister(formData: FormData): Record<string, string> {
+    const errors: Record<string, string> = {};
+    const firstName = String(formData.get("firstName") ?? "").trim();
+    const lastName = String(formData.get("lastName") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const phone = String(formData.get("phone") ?? "").trim();
+    const birthday = String(formData.get("birthday") ?? "");
+    const address = String(formData.get("address") ?? "").trim();
+    const password = String(formData.get("password") ?? "");
+    const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
+    if (!firstName) errors.firstName = "First name is required.";
+    if (!lastName) errors.lastName = "Last name is required.";
+
+    if (!email) errors.email = "Email is required.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      errors.email = "Please enter a valid email address.";
+
+    if (!phone) errors.phone = "Phone number is required.";
+    else if (!/^[+]?[\d\s]{9,15}$/.test(phone))
+      errors.phone = "Enter a valid phone number (9–15 digits).";
+
+    if (!birthday) errors.birthday = "Date of birth is required.";
+    else {
+      const dob = new Date(birthday);
+      const today = new Date();
+      if (dob > today) errors.birthday = "Date of birth cannot be in the future.";
+      else {
+        const age =
+          (today.getTime() - dob.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+        if (age < 13) errors.birthday = "You must be at least 13 years old.";
+        if (age > 120) errors.birthday = "Please enter a valid date of birth.";
+      }
+    }
+
+    if (!address) errors.address = "Address is required.";
+
+    if (!password) errors.password = "Password is required.";
+    else if (password.length < 8)
+      errors.password = "Password must be at least 8 characters.";
+
+    if (!confirmPassword)
+      errors.confirmPassword = "Please confirm your password.";
+    else if (password !== confirmPassword)
+      errors.confirmPassword = "Passwords do not match.";
+
+    return errors;
+  }
+
+  const handleSubmit = (formData: FormData) => {
+    const errors = validateRegister(formData);
+    setClientErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+    formAction(formData);
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const form = e.currentTarget.form;
+    if (!form) return;
+    const errors = validateRegister(new FormData(form));
+    const name = e.currentTarget.name;
+    setClientErrors((prev) => ({ ...prev, [name]: errors[name] || "" }));
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const cleaned = e.target.value.replace(/[^\d+\s]/g, "");
+    setPhone(cleaned);
   };
   return (
     <>
@@ -177,7 +248,7 @@ export default function Register() {
                 <div className="flex-1 h-px bg-[#CCCCCC]" />
               </div>
 
-              <form action={formAction} noValidate>
+              <form action={handleSubmit} noValidate>
                 {state.error && (
                   <div role="alert" className="mb-5 rounded-[10px] border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
                     {state.error}
@@ -210,7 +281,13 @@ export default function Register() {
                       placeholder="Olivia"
                       autoComplete="given-name"
                       required
+                      onBlur={handleBlur}
                     />
+                    {clientErrors.firstName && (
+                      <p className="mt-1 text-xs text-red-600">
+                        {clientErrors.firstName}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex-1">
@@ -238,7 +315,13 @@ export default function Register() {
                       placeholder="Smith"
                       autoComplete="family-name"
                       required
+                      onBlur={handleBlur}
                     />
+                    {clientErrors.lastName && (
+                      <p className="mt-1 text-xs text-red-600">
+                        {clientErrors.lastName}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -268,7 +351,13 @@ export default function Register() {
                     placeholder="you@example.com"
                     autoComplete="email"
                     required
+                    onBlur={handleBlur}
                   />
+                  {clientErrors.email && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Phone */}
@@ -294,10 +383,19 @@ export default function Register() {
                       focus:border-[#B76E79] focus:border-2 focus:px-[15px]
                       focus:shadow-[0_0_0_4px_rgba(183,110,121,0.1)]
                     "
-                    placeholder="+1 (555) 000-0000"
+                    placeholder="+94 77 123 4567"
                     autoComplete="tel"
                     required
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    inputMode="tel"
+                    onBlur={handleBlur}
                   />
+                  {clientErrors.phone && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.phone}
+                    </p>
+                  )}
                 </div>
 
                 {/* Date of Birth */}
@@ -327,7 +425,13 @@ export default function Register() {
                     "
                     autoComplete="bday"
                     required
+                    onBlur={handleBlur}
                   />
+                  {clientErrors.birthday && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.birthday}
+                    </p>
+                  )}
                 </div>
 
                 {/* Address */}
@@ -356,7 +460,13 @@ export default function Register() {
                     placeholder="123 Beauty Lane, Suite 4"
                     autoComplete="street-address"
                     required
+                    onBlur={handleBlur}
                   />
+                  {clientErrors.address && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.address}
+                    </p>
+                  )}
                 </div>
 
                 {/* Password */}
@@ -385,7 +495,13 @@ export default function Register() {
                     placeholder="Create a strong password"
                     autoComplete="new-password"
                     required
+                    onBlur={handleBlur}
                   />
+                  {clientErrors.password && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.password}
+                    </p>
+                  )}
                 </div>
 
                 {/* Confirm Password */}
@@ -414,7 +530,13 @@ export default function Register() {
                     placeholder="Re-enter your password"
                     autoComplete="new-password"
                     required
+                    onBlur={handleBlur}
                   />
+                  {clientErrors.confirmPassword && (
+                    <p className="mt-1 text-xs text-red-600">
+                      {clientErrors.confirmPassword}
+                    </p>
+                  )}
                 </div>
 
                 {/* Submit */}
