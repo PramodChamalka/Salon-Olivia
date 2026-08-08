@@ -64,6 +64,15 @@ export async function middleware(request: NextRequest) {
       url.pathname = '/unauthorized'
       return NextResponse.redirect(url)
     }
+
+    if (
+      PROTECTED.some((p) => path.startsWith(p)) &&
+      profile?.role === 'admin'
+    ) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/admin'
+      return NextResponse.redirect(url)
+    }
   }
 
   return response

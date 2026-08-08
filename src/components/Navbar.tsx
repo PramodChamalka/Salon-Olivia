@@ -9,9 +9,11 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<{ email: string; firstName: string } | null>(
-    null,
-  );
+  const [user, setUser] = useState<{
+    email: string;
+    firstName: string;
+    isAdmin: boolean;
+  } | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -29,12 +31,13 @@ export function Navbar() {
       }
       const { data: profile } = await supabase
         .from("profiles")
-        .select("first_name")
+        .select("first_name, role")
         .eq("id", authUser.id)
         .single();
       setUser({
         email: authUser.email ?? "",
         firstName: profile?.first_name ?? "Account",
+        isAdmin: profile?.role === "admin",
       });
       setLoadingUser(false);
     };
@@ -122,11 +125,11 @@ export function Navbar() {
                         </p>
                       </div>
                       <Link
-                        href="/profile"
+                        href={user.isAdmin ? "/admin" : "/profile"}
                         onClick={() => setUserMenuOpen(false)}
                         className="block px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 transition-colors hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
                       >
-                        My Profile
+                        {user.isAdmin ? "Admin Dashboard" : "My Profile"}
                       </Link>
                       <a
                         href="/logout"
@@ -192,11 +195,11 @@ export function Navbar() {
                     </p>
                   </div>
                   <Link
-                    href="/profile"
+                    href={user.isAdmin ? "/admin" : "/profile"}
                     onClick={() => setMobileMenuOpen(false)}
                     className="mt-2 block rounded-md px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
                   >
-                    My Profile
+                    {user.isAdmin ? "Admin Dashboard" : "My Profile"}
                   </Link>
                   <a
                     href="/logout"
