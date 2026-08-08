@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PageShell } from "../components/PageShell";
-import { Hero } from "../components/Hero";
-import { Services } from "../components/Services";
-import { Gallery } from "../components/Gallery";
-import { Stats } from "../components/Stats";
-import { Testimonials } from "../components/Testimonials";
-import { WhyChooseUs } from "../components/WhyChooseUs";
+import { PageShell } from "./PageShell";
+import { Hero } from "./Hero";
+import { Services } from "./Services";
+import { Gallery } from "./Gallery";
+import { Stats } from "./Stats";
+import { Testimonials } from "./Testimonials";
+import { WhyChooseUs } from "./WhyChooseUs";
 
 export default function LandingPage() {
   return (
