@@ -17,7 +17,7 @@ export function PageShell({ children, hideFloatingChat = false }: PageShellProps
   const [chatOpen, setChatOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white dark:bg-[#1f1f1f] text-gray-900 dark:text-gray-100">
       <WelcomeTour />
       <Navbar />
       <main className="pt-20">{children}</main>

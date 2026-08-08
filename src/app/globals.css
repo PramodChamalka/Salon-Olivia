@@ -8,38 +8,52 @@
 
 /* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
 
+/* Color tokens are stored as raw RGB channel triplets (not hex) so that
+   Tailwind opacity modifiers (bg-salon-cream/30) work via the
+   rgb(var(--token) / <alpha-value>) syntax in tailwind.config.js.
+   Always consume these through rgb(), never bare. */
 :root {
-	--salon-primary: #B76E79; /* primary buttons, icons, nav accents */
-	--salon-gold: #D4AF37; /* hover effects, decorative, premium CTAs */
-	--salon-cream: #FFFDF9; /* main page background, content sections */
-	--salon-card: #F8D7DA; /* cards, forms, dialog boxes, nav menus */
-	--salon-section: #F8D7DA; /* section backgrounds */
-	--salon-overlay: #F8D7DA; /* overlays */
+	--salon-primary: 183 110 121; /* #B76E79 primary buttons, icons, nav accents */
+	--salon-gold: 212 175 55; /* #D4AF37 hover effects, decorative, premium CTAs */
+	--salon-cream: 255 253 249; /* #FFFDF9 main page background, content sections */
+	--salon-card: 248 215 218; /* #F8D7DA cards, forms, dialog boxes, nav menus */
+	--salon-section: 248 215 218; /* #F8D7DA section backgrounds */
+	--salon-overlay: 248 215 218; /* #F8D7DA overlays */
+	--salon-charcoal: 51 51 51; /* #333333 headings, body paragraphs, primary text */
+	--salon-slate: 102 102 102; /* #666666 descriptions, captions, labels */
+	--salon-success: 46 139 87; /* #2E8B57 success messages, confirmations */
+	--salon-warning: 244 163 0; /* #F4A300 validation warnings, alerts */
+	--salon-error: 214 40 40; /* #D62828 error messages, invalid fields */
+}
+
+/* Dark mode token overrides. Must stay AFTER the :root block --
+   .dark and :root have equal specificity, so source order decides. */
+.dark {
+	--salon-cream: 26 26 26; /* dark page bg */
+	--salon-charcoal: 232 232 232; /* light text */
+	--salon-slate: 176 176 176; /* secondary text */
+	--salon-card: 42 42 42; /* cards, forms */
+	--salon-section: 35 35 35; /* section backgrounds */
+	--salon-overlay: 42 42 42; /* overlays */
+	/* brand accents stay the same in dark mode */
+	--salon-primary: 183 110 121;
+	--salon-gold: 212 175 55;
 }
 
 html, body {
-	background-color: var(--salon-cream);
-	color: var(--salon-charcoal, #333333);
-}
-
-/* UI color tokens (from style guide) */
-:root {
-	--salon-charcoal: #333333; /* headings, body paragraphs, primary text */
-	--salon-slate: #666666; /* descriptions, captions, labels */
-	--salon-success: #2E8B57; /* success messages, confirmations */
-	--salon-warning: #F4A300; /* validation warnings, alerts */
-	--salon-error: #D62828; /* error messages, invalid fields */
+	background-color: rgb(var(--salon-cream));
+	color: rgb(var(--salon-charcoal));
 }
 
 /* Helper classes for alerts and text (also usable in non-Tailwind contexts) */
-.alert-success { background-color: var(--salon-success); color: white; }
-.alert-warning { background-color: var(--salon-warning); color: white; }
-.alert-error { background-color: var(--salon-error); color: white; }
-.text-salon-charcoal { color: var(--salon-charcoal); }
-.text-salon-slate { color: var(--salon-slate); }
-.bg-salon-card { background-color: var(--salon-card); }
-.bg-salon-section { background-color: var(--salon-section); }
-.bg-salon-overlay { background-color: var(--salon-overlay); }
+.alert-success { background-color: rgb(var(--salon-success)); color: white; }
+.alert-warning { background-color: rgb(var(--salon-warning)); color: white; }
+.alert-error { background-color: rgb(var(--salon-error)); color: white; }
+.text-salon-charcoal { color: rgb(var(--salon-charcoal)); }
+.text-salon-slate { color: rgb(var(--salon-slate)); }
+.bg-salon-card { background-color: rgb(var(--salon-card)); }
+.bg-salon-section { background-color: rgb(var(--salon-section)); }
+.bg-salon-overlay { background-color: rgb(var(--salon-overlay)); }
 
 /* Small accessibility helper to ensure adequate contrast for white text on colored backgrounds */
 .text-on-dark { color: white; }

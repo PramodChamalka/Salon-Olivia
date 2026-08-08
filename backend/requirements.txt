@@ -1,0 +1,27 @@
+# Salon Olivia — FastAPI backend dependencies
+#
+# Detected with pipreqs from the real imports in backend/, then completed by hand.
+#
+# Versions are intentionally UNPINNED. Nothing is installed in this environment,
+# so pipreqs resolved every version from PyPI "latest" rather than from a working
+# install — those numbers describe today's PyPI, not a combination anyone has run
+# this app against. Once you have a venv that boots the app, replace this with
+# `pip freeze` output to lock a verified set.
+
+# --- Web framework ---
+fastapi
+uvicorn          # ASGI server. Not imported in code; required to run app.main:app
+pydantic
+
+# --- Supabase / config ---
+supabase
+python-dotenv
+
+# --- RAG / LangChain ---
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-chroma        # pulls in chromadb as a hard dependency
+langchain-huggingface
+sentence-transformers   # required by HuggingFaceEmbeddings; only an *optional* extra of langchain-huggingface
+langchain-google-genai
