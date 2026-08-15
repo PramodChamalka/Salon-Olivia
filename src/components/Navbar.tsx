@@ -102,7 +102,7 @@ export function Navbar() {
             >
               Book Now
             </Link>
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             {!loadingUser &&
               (user ? (
                 <div className="relative" data-tour="nav-account">
