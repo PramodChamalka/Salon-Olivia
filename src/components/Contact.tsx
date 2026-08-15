@@ -102,9 +102,9 @@ export function Contact() {
                     Call Us
                   </h4>
                   <p className="text-gray-600 text-sm leading-relaxed">
-                    +94 11 234 5678
+                    +94 77 309 1720
                     <br />
-                    +94 77 987 6543
+                    +94 77 626 1549
                   </p>
                 </div>
               </div>

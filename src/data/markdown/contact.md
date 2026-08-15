@@ -18,7 +18,7 @@ Sri Lanka
 
 ## Contact Number
 
-+94 77 987 6543
++94 77 309 1720 (WhatsApp) / +94 77 626 1549
 
 ---
 
@@ -82,7 +82,7 @@ For the best experience, clients are encouraged to:
 
 ### Do you have a WhatsApp number?
 
-Currently, clients may contact Salon Olivia using the official phone number.
+Yes. You can reach Salon Olivia on WhatsApp at +94 77 309 1720.
 
 ### Can I visit without an appointment?
 
@@ -94,6 +94,6 @@ Walk-ins are accepted depending on beautician availability.
 
 You may:
 
-- Call +94 77 987 6543
+- Call +94 77 309 1720 (WhatsApp) / +94 77 626 1549
 - Email bookings@salonolivia.lk
 - Visit the salon during business hours.

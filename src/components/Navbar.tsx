@@ -4,13 +4,16 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { User as UserIcon, ChevronDown } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<{ email: string; firstName: string } | null>(
-    null,
-  );
+  const [user, setUser] = useState<{
+    email: string;
+    firstName: string;
+    isAdmin: boolean;
+  } | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -28,12 +31,13 @@ export function Navbar() {
       }
       const { data: profile } = await supabase
         .from("profiles")
-        .select("first_name")
+        .select("first_name, role")
         .eq("id", authUser.id)
         .single();
       setUser({
         email: authUser.email ?? "",
         firstName: profile?.first_name ?? "Account",
+        isAdmin: profile?.role === "admin",
       });
       setLoadingUser(false);
     };
@@ -65,9 +69,10 @@ export function Navbar() {
 
   return (
     <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white shadow-md py-3" : "bg-white/90 backdrop-blur-sm py-5"}`}
+      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white dark:bg-[#1f1f1f] shadow-md py-3" : "bg-white/90 dark:bg-[#1f1f1f]/90 backdrop-blur-sm py-5"}`}
     >
-      <div className="mx-auto max-w-7xl px-4 py-5 bg-stone-100 rounded-lg sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-5 bg-stone-100 dark:bg-[#1f1f1f] rounded-full sm:px-6 lg:px-8 shadow-[0_0_15px_rgba(190,110,120,0.35)] dark:shadow-[0_0_20px_rgba(225,150,160,0.25)]">
+        {" "}
         <div className="flex items-center justify-between">
           <Link
             href="/"
@@ -85,7 +90,7 @@ export function Navbar() {
                 key={link.name}
                 href={link.href}
                 data-tour={`nav-${link.name.toLowerCase()}`}
-                className="text-sm font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-salon-gold"
+                className="text-sm font-medium uppercase tracking-wider text-gray-600 dark:text-gray-300 transition-colors hover:text-salon-gold"
               >
                 {link.name}
               </Link>
@@ -97,12 +102,13 @@ export function Navbar() {
             >
               Book Now
             </Link>
+            {/* <ThemeToggle /> */}
             {!loadingUser &&
               (user ? (
                 <div className="relative" data-tour="nav-account">
                   <button
                     onClick={() => setUserMenuOpen(!userMenuOpen)}
-                    className="flex items-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-salon-gold"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300 transition-colors hover:text-salon-gold"
                   >
                     <span className="flex h-8 w-8 items-center justify-center rounded-full bg-salon-gold text-xs font-semibold uppercase text-white">
                       {user.firstName.charAt(0)}
@@ -113,22 +119,22 @@ export function Navbar() {
                     <ChevronDown size={16} />
                   </button>
                   {userMenuOpen && (
-                    <div className="absolute right-0 mt-3 w-52 overflow-hidden rounded-lg border border-gray-100 bg-white shadow-lg">
-                      <div className="border-b border-gray-100 px-4 py-3">
-                        <p className="truncate text-xs text-gray-500">
+                    <div className="absolute right-0 mt-3 w-52 overflow-hidden rounded-lg border border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1f1f1f] shadow-lg">
+                      <div className="border-b border-gray-100 dark:border-gray-800 px-4 py-3">
+                        <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                           {user.email}
                         </p>
                       </div>
                       <Link
-                        href="/profile"
+                        href={user.isAdmin ? "/admin" : "/profile"}
                         onClick={() => setUserMenuOpen(false)}
-                        className="block px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-salon-cream hover:text-salon-gold"
+                        className="block px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 transition-colors hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
                       >
-                        My Profile
+                        {user.isAdmin ? "Admin Dashboard" : "My Profile"}
                       </Link>
                       <a
                         href="/logout"
-                        className="block border-t border-gray-100 px-4 py-3 text-sm font-medium text-gray-700 transition-colors hover:bg-salon-cream hover:text-salon-gold"
+                        className="block border-t border-gray-100 dark:border-gray-800 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-200 transition-colors hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
                       >
                         Logout
                       </a>
@@ -139,7 +145,7 @@ export function Navbar() {
                 <Link
                   href="/login"
                   data-tour="nav-account"
-                  className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-gray-600 transition-colors hover:text-salon-gold"
+                  className="flex items-center gap-2 text-sm font-medium uppercase tracking-wider text-gray-600 dark:text-gray-300 transition-colors hover:text-salon-gold"
                 >
                   <UserIcon size={16} />
                   Sign In
@@ -150,7 +156,7 @@ export function Navbar() {
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-gray-600 hover:text-salon-dark focus:outline-none"
+              className="text-gray-600 dark:text-gray-300 hover:text-salon-dark focus:outline-none"
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -159,14 +165,17 @@ export function Navbar() {
       </div>
 
       {mobileMenuOpen && (
-        <div className="absolute w-full border-t border-gray-100 bg-white shadow-lg md:hidden">
+        <div className="absolute w-full border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-[#1f1f1f] shadow-lg md:hidden">
           <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+            <div className="flex justify-end px-3 py-2">
+              <ThemeToggle />
+            </div>
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-salon-cream hover:text-salon-gold"
+                className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
               >
                 {link.name}
               </Link>
@@ -181,21 +190,21 @@ export function Navbar() {
             {!loadingUser &&
               (user ? (
                 <>
-                  <div className="mt-4 border-t border-gray-100 px-3 pt-3">
-                    <p className="truncate text-xs text-gray-500">
+                  <div className="mt-4 border-t border-gray-100 dark:border-gray-800 px-3 pt-3">
+                    <p className="truncate text-xs text-gray-500 dark:text-gray-400">
                       {user.email}
                     </p>
                   </div>
                   <Link
-                    href="/profile"
+                    href={user.isAdmin ? "/admin" : "/profile"}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="mt-2 block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-salon-cream hover:text-salon-gold"
+                    className="mt-2 block rounded-md px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
                   >
-                    My Profile
+                    {user.isAdmin ? "Admin Dashboard" : "My Profile"}
                   </Link>
                   <a
                     href="/logout"
-                    className="mt-2 block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-salon-cream hover:text-salon-gold"
+                    className="mt-2 block rounded-md px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
                   >
                     Logout
                   </a>
@@ -204,7 +213,7 @@ export function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="mt-4 block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-salon-cream hover:text-salon-gold"
+                  className="mt-4 block rounded-md px-3 py-2 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-salon-cream dark:hover:bg-[#2a2a2a] hover:text-salon-gold"
                 >
                   Sign In
                 </Link>

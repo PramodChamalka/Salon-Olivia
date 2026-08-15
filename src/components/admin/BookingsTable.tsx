@@ -154,7 +154,7 @@ export function BookingsTable() {
                   </td>
                   <td className="p-4 text-sm text-gray-600">
                     {new Date(booking.preferred_time).toLocaleString(
-                      undefined,
+                      "en-US",
                       {
                         dateStyle: "medium",
                         timeStyle: "short",

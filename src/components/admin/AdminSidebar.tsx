@@ -10,6 +10,7 @@ import {
   Users,
   LogOut,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const NAV_ITEMS = [
   { label: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -57,6 +58,9 @@ export function AdminSidebar() {
         >
           <LogOut size={20} className="mr-3" /> Back to Site
         </Link>
+        <div className="flex items-center px-4 py-2">
+          <ThemeToggle className="text-gray-300 hover:bg-gray-800" />
+        </div>
       </div>
     </aside>
   );

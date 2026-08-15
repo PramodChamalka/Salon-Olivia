@@ -90,7 +90,10 @@ export async function loginAction(
   }
 
   const supabase = await createClient()
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
+  const { data: signInData, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
 
   if (error) {
     const nextCount = (attempt?.fail_count ?? 0) + 1
@@ -116,7 +119,18 @@ export async function loginAction(
   await supabaseAdmin.from('login_attempts').delete().eq('email', email)
 
   revalidatePath('/', 'layout')
-  redirect(redirectTo || '/')
+
+  if (redirectTo) {
+    redirect(redirectTo)
+  }
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', signInData.user.id)
+    .single()
+
+  redirect(profile?.role === 'admin' ? '/admin' : '/')
 }
 
 export async function logoutAction() {

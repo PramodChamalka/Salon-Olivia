@@ -17,7 +17,7 @@ export function PageShell({ children, hideFloatingChat = false }: PageShellProps
   const [chatOpen, setChatOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen bg-white dark:bg-[#1f1f1f] text-gray-900 dark:text-gray-100">
       <WelcomeTour />
       <Navbar />
       <main className="pt-20">{children}</main>
@@ -26,7 +26,7 @@ export function PageShell({ children, hideFloatingChat = false }: PageShellProps
         <AIAdvisor isOpen={chatOpen} setIsOpen={setChatOpen} />
       )}
       <Link
-        href="https://wa.me/94771234567"
+        href="https://wa.me/94773091720"
         target="_blank"
         rel="noreferrer"
         aria-hidden={chatOpen}
