@@ -44,7 +44,7 @@ export function AIAdvisor({
     setError(null);
 
     try {
-      const response = await fetch("https://hostit.api.stellarcode.digital/chat", {
+      const response = await fetch("/api/ai-advisor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
