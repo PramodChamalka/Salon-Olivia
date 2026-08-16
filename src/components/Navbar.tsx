@@ -71,7 +71,8 @@ export function Navbar() {
     <nav
       className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-white dark:bg-[#1f1f1f] shadow-md py-3" : "bg-white/90 dark:bg-[#1f1f1f]/90 backdrop-blur-sm py-5"}`}
     >
-      <div className="mx-auto max-w-7xl px-4 py-5 bg-stone-100 dark:bg-[#1f1f1f] rounded-lg sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-5 bg-stone-100 dark:bg-[#1f1f1f] rounded-full sm:px-6 lg:px-8 shadow-[0_0_15px_rgba(190,110,120,0.35)] dark:shadow-[0_0_20px_rgba(225,150,160,0.25)]">
+        {" "}
         <div className="flex items-center justify-between">
           <Link
             href="/"
@@ -101,7 +102,7 @@ export function Navbar() {
             >
               Book Now
             </Link>
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             {!loadingUser &&
               (user ? (
                 <div className="relative" data-tour="nav-account">
