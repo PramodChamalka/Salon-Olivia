@@ -44,7 +44,7 @@ export function AIAdvisor({
     setError(null);
 
     try {
-      const response = await fetch("/api/ai-advisor", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_AI_ADVISOR_BASE_URL}/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
