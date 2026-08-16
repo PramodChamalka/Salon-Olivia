@@ -43,7 +43,7 @@ export default function LandingPage() {
 
             <div className="overflow-hidden rounded-3xl shadow-xl">
               <Image
-                src="/images/oliv.jpeg"
+                src="/images/olivi.jpg"
                 alt="Salon Olivia interior"
                 className="h-[500px] w-full object-cover"
                 width={650}
