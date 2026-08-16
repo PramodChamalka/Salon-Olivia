@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 
 type GalleryProps = {
   variant?: "full" | "preview";
@@ -15,7 +16,14 @@ type GalleryItem = {
   created_at: string;
 };
 
-const GALLERY_API_URL = "http://localhost:8000/gallery";
+type GalleryRow = {
+  id: string;
+  title: string;
+  image_url: string;
+  category_id: string;
+  created_at: string;
+  category: { category_name: string } | null;
+};
 
 export function Gallery({ variant = "full" }: GalleryProps) {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -26,20 +34,30 @@ export function Gallery({ variant = "full" }: GalleryProps) {
 
   useEffect(() => {
     let cancelled = false;
+    const supabase = createClient();
 
-    fetch(GALLERY_API_URL)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Request failed with ${res.status}`);
-        return res.json() as Promise<GalleryItem[]>;
-      })
-      .then((data) => {
-        if (!cancelled) {
-          setItems(data);
-          setStatus("ready");
+    supabase
+      .from("gallery")
+      .select("id, title, image_url, category_id, created_at, category(category_name)")
+      .order("created_at", { ascending: false })
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error || !data) {
+          setStatus("error");
+          return;
         }
-      })
-      .catch(() => {
-        if (!cancelled) setStatus("error");
+        const rows = data as unknown as GalleryRow[];
+        setItems(
+          rows.map((row) => ({
+            id: row.id,
+            title: row.title,
+            image_url: row.image_url,
+            category_id: row.category_id,
+            category_name: row.category?.category_name ?? "Uncategorized",
+            created_at: row.created_at,
+          }))
+        );
+        setStatus("ready");
       });
 
     return () => {

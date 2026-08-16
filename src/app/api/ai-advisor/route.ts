@@ -1,8 +1,12 @@
 import { NextResponse, type NextRequest } from 'next/server'
 
-const ADVISOR_ENDPOINT = 'https://hostit.api.stellarcode.digital/chat'
-
 export async function POST(request: NextRequest) {
+  const baseUrl = process.env.AI_ADVISOR_BASE_URL
+  if (!baseUrl) {
+    console.error('AI_ADVISOR_BASE_URL is not set.')
+    return NextResponse.json({ error: 'Advisor unavailable.' }, { status: 502 })
+  }
+
   const { question } = await request.json()
 
   if (typeof question !== 'string' || !question.trim()) {
@@ -11,7 +15,7 @@ export async function POST(request: NextRequest) {
 
   let upstream: Response
   try {
-    upstream = await fetch(ADVISOR_ENDPOINT, {
+    upstream = await fetch(`${baseUrl.replace(/\/+$/, '')}/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question }),
